@@ -1,0 +1,10 @@
+---
+interface Props {
+  index: string;
+  label: string;
+}
+
+const { index, label } = Astro.props;
+---
+
+<div class="font-mono text-[13px] font-semibold text-accent">{index} / {label}</div>

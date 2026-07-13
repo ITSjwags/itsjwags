@@ -1,8 +1,22 @@
 ---
-import ThemeToggle from '../components/ThemeToggle.astro';
+import About from '../components/About.astro';
+import CurrentlyBuilding from '../components/CurrentlyBuilding.astro';
+import Experience from '../components/Experience.astro';
+import Footer from '../components/Footer.astro';
+import Hero from '../components/Hero.astro';
+import OffTheClock from '../components/OffTheClock.astro';
+import TopBar from '../components/TopBar.astro';
 import Base from '../layouts/Base.astro';
 ---
 
-<Base title="Jonathan Wagoner">
-  <ThemeToggle />
+<Base title="Jonathan Wagoner — Frontend Engineer">
+  <div class="mx-auto max-w-[1120px] px-8">
+    <TopBar />
+    <Hero />
+    <About />
+    <CurrentlyBuilding />
+    <Experience />
+    <OffTheClock />
+    <Footer />
+  </div>
 </Base>

@@ -1,0 +1,29 @@
+---
+import { companies } from '../data/experience';
+import SectionLabel from './SectionLabel.astro';
+---
+
+<section class="border-t border-border py-[60px]">
+  <div class="mb-2">
+    <SectionLabel index="03" label="BEEN AT THIS A WHILE" />
+  </div>
+  <p class="mb-8 max-w-[600px] text-[17px] leading-[1.6] text-muted">
+    Currently a Staff Software Engineer at ZenBusiness. Full history's in the
+    <a href="/resume/JonathanWagoner-Resume2026.pdf" download class="text-accent underline">resume</a>.
+  </p>
+  <div class="flex flex-col">
+    {
+      companies.map((company) => (
+        <a
+          href={company.url}
+          target="_blank"
+          rel="noopener"
+          class="flex items-baseline justify-between border-b border-border py-[18px] text-fg-2 no-underline hover:text-accent"
+        >
+          <span class="font-display text-2xl font-semibold">{company.name}</span>
+          <span class="font-mono text-[13px] text-muted-2">{company.role} ↗</span>
+        </a>
+      ))
+    }
+  </div>
+</section>
