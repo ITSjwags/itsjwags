@@ -1,0 +1,84 @@
+@import "tailwindcss";
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-fg: var(--fg);
+  --color-fg-2: var(--fg2);
+  --color-fg-3: var(--fg3);
+  --color-border: var(--border);
+  --color-accent: var(--accent);
+  --font-display: var(--app-font-display);
+  --font-mono: var(--app-font-mono);
+}
+
+:root,
+[data-theme="dark"] {
+  --bg: #131210;
+  --fg: #f2ede4;
+  --fg2: #e9e3d8;
+  --fg3: #c9c2b4;
+  --border: #2a2620;
+  --accent: #e8b84b;
+  --app-font-display: 'Space Grotesk', sans-serif;
+  --app-font-mono: 'JetBrains Mono', monospace;
+}
+
+[data-theme="light"] {
+  --bg: #faf7f1;
+  --fg: #1c1a15;
+  --fg2: #2a2620;
+  --fg3: #4a453c;
+  --border: #e4ddd0;
+  --accent: #93641a;
+}
+
+@layer base {
+  body {
+    @apply font-mono bg-bg text-fg;
+    margin: 0;
+  }
+  h1, h2, h3 {
+    @apply font-display;
+  }
+  a {
+    color: inherit;
+  }
+  ::selection {
+    background: #e8c66b;
+    color: #131210;
+  }
+}
+
+@keyframes cursor-blink {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0; }
+}
+
+@keyframes drum-pulse {
+  0%, 100% { transform: scaleY(0.4); }
+  50% { transform: scaleY(1); }
+}
+
+@keyframes golf-putt {
+  0% { right: calc(100% - 20px); transform: scale(1); animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1); }
+  60% { transform: scale(1); animation-timing-function: ease-out; }
+  82% { transform: scale(0); }
+  100% { right: 14px; transform: scale(0); }
+}
+
+@keyframes float-up {
+  from { opacity: 0; transform: translateY(22px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-cursor-blink { animation: cursor-blink 1s step-end infinite; }
+.animate-drum-pulse { animation: drum-pulse 1.1s ease-in-out infinite; transform-origin: bottom; }
+.animate-golf-putt { animation: golf-putt 4.2s infinite; }
+.animate-float-up { animation: float-up 0.7s ease both; }
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-cursor-blink { animation: none; opacity: 1; }
+  .animate-drum-pulse { animation: none; transform: scaleY(1); }
+  .animate-golf-putt { animation: none; right: 14px; transform: scale(0); }
+  .animate-float-up { animation: none; opacity: 1; transform: translateY(0); }
+}
