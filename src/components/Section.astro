@@ -6,6 +6,7 @@ interface Props {
   label: string;
   padding?: string;
   labelMargin?: string;
+  class?: string;
 }
 
 const {
@@ -13,10 +14,11 @@ const {
   label,
   padding = 'py-10 sm:py-[60px]',
   labelMargin = 'mb-7',
+  class: className = '',
 } = Astro.props;
 ---
 
-<section class={`animate-on-scroll border-t border-border ${padding}`}>
+<section class={`animate-on-scroll border-t border-border ${padding} ${className}`}>
   <SectionLabel index={index} label={label} class={labelMargin} />
   <slot />
 </section>

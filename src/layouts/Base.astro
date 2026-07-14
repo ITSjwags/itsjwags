@@ -49,11 +49,14 @@ const personSchema = {
     <meta name="twitter:image" content={new URL('/og-image.png', Astro.site).href} />
     <script type="application/ld+json" is:inline set:html={JSON.stringify(personSchema)} />
     <script is:inline>
-      // Key must match THEME_STORAGE_KEY in src/lib/constants.ts — inline
-      // scripts can't import modules and still run synchronously pre-paint.
+      // 'jw-theme' key is duplicated in ThemeToggle.astro (see src/lib/constants.ts
+      // for why) — keep both in sync if it ever changes.
       (function () {
         var theme = localStorage.getItem('jw-theme') || 'dark';
         document.documentElement.dataset.theme = theme;
+        // Gates .animate-on-scroll's hidden starting state (see global.css) —
+        // without this, content stays invisible forever if JS fails to run.
+        document.documentElement.classList.add('js');
       })();
     </script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />

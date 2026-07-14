@@ -110,8 +110,10 @@
 .animate-float-up { animation: float-up 0.7s ease both; }
 
 /* Scroll-triggered reveal for below-the-fold sections (Base.astro's
-   IntersectionObserver adds .is-visible on first entry into viewport). */
-.animate-on-scroll {
+   IntersectionObserver adds .is-visible on first entry into viewport).
+   Hidden starting state is gated behind .js (set by the pre-paint script)
+   so content stays visible by default if JS fails to run. */
+.js .animate-on-scroll {
   opacity: 0;
 }
 .animate-on-scroll.is-visible {

@@ -1,9 +1,13 @@
 ---
-import SectionLabel from './SectionLabel.astro';
+import Section from './Section.astro';
 ---
 
-<section class="animate-on-scroll grid grid-cols-1 gap-4 border-t border-border py-10 sm:py-[60px] md:grid-cols-[200px_1fr] md:gap-12">
-  <SectionLabel index="01" label="ABOUT" />
+<Section
+  index="01"
+  label="ABOUT"
+  labelMargin=""
+  class="grid grid-cols-1 gap-4 md:grid-cols-[200px_1fr] md:gap-12"
+>
   <div class="flex max-w-[680px] flex-col gap-4 font-display text-[18px] leading-[1.6] text-fg-2 sm:gap-5 sm:text-[22px] sm:leading-[1.75]">
     <p class="m-0">
       I've spent most of my career helping teams turn ideas into products, mostly at early-stage
@@ -16,4 +20,4 @@ import SectionLabel from './SectionLabel.astro';
       about the newest framework than software people actually enjoy using.
     </p>
   </div>
-</section>
+</Section>

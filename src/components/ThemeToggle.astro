@@ -15,24 +15,32 @@
   ></span>
 </button>
 
-<script>
-  import { THEME_STORAGE_KEY } from '../lib/constants';
+<script is:inline>
+  // Runs synchronously (is:inline) rather than as a deferred module, so
+  // aria-checked/aria-label are corrected before paint instead of lagging
+  // behind the pre-paint theme script by a deferred-script tick. The
+  // 'jw-theme' key is duplicated in Base.astro (see src/lib/constants.ts
+  // for why) — keep both in sync if it ever changes.
+  (function () {
+    var button = document.getElementById('theme-toggle');
 
-  const button = document.getElementById('theme-toggle');
+    function sync(theme) {
+      var isLight = theme === 'light';
+      if (!button) return;
+      button.setAttribute('aria-checked', String(isLight));
+      button.setAttribute('aria-label', isLight ? 'Switch to dark theme' : 'Switch to light theme');
+    }
 
-  function sync(theme: string) {
-    const isLight = theme === 'light';
-    button?.setAttribute('aria-checked', String(isLight));
-    button?.setAttribute('aria-label', isLight ? 'Switch to dark theme' : 'Switch to light theme');
-  }
+    if (button) {
+      button.addEventListener('click', function () {
+        var current = document.documentElement.dataset.theme || 'dark';
+        var next = current === 'dark' ? 'light' : 'dark';
+        document.documentElement.dataset.theme = next;
+        localStorage.setItem('jw-theme', next);
+        sync(next);
+      });
+    }
 
-  button?.addEventListener('click', () => {
-    const current = document.documentElement.dataset.theme ?? 'dark';
-    const next = current === 'dark' ? 'light' : 'dark';
-    document.documentElement.dataset.theme = next;
-    localStorage.setItem(THEME_STORAGE_KEY, next);
-    sync(next);
-  });
-
-  sync(document.documentElement.dataset.theme ?? 'dark');
+    sync(document.documentElement.dataset.theme || 'dark');
+  })();
 </script>
