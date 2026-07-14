@@ -11,7 +11,7 @@ const isExternal = href.startsWith('http');
   href={href}
   target={isExternal ? '_blank' : undefined}
   rel={isExternal ? 'noopener' : undefined}
-  class="inline-flex items-center gap-2.5 rounded-[2px] bg-accent px-[22px] py-3 font-mono text-[15px] font-semibold text-on-accent no-underline"
+  class="inline-flex items-center gap-2.5 rounded-[2px] bg-accent px-[22px] py-3 font-mono text-[15px] font-semibold text-on-accent no-underline hover:opacity-80"
 >
   <slot />
   {isExternal && <span class="sr-only"> (opens in new tab)</span>}

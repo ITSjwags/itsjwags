@@ -66,6 +66,14 @@
   a {
     color: inherit;
   }
+  a, button {
+    transition: color 150ms ease, background-color 150ms ease, opacity 150ms ease;
+  }
+  a:focus-visible, button:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+    border-radius: 2px;
+  }
   [data-theme-thumb] {
     left: 2px;
   }
@@ -79,6 +87,45 @@
   ::selection {
     background: #e8c66b;
     color: #131210;
+  }
+  /* Plain text links (no arrow glyph): underline grows in from the left on
+     hover instead of sitting there statically. Uses currentColor so it
+     always matches whatever color the text transitions to. */
+  .link-underline {
+    position: relative;
+    text-decoration: none;
+  }
+  .link-underline::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -2px;
+    height: 1px;
+    background: currentColor;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 200ms ease;
+  }
+  .link-underline:hover::after {
+    transform: scaleX(1);
+  }
+  /* Arrow glyphs (↗/→): nudge in the direction they point on ancestor
+     link hover. Shared across every link that carries one, so the motion
+     language is consistent regardless of where the arrow appears. */
+  .arrow-glyph {
+    display: inline-block;
+    transition: transform 150ms ease;
+  }
+  a:hover .arrow-glyph {
+    transform: translate(2px, -2px);
+  }
+  .arrow-glyph-right {
+    display: inline-block;
+    transition: transform 150ms ease;
+  }
+  a:hover .arrow-glyph-right {
+    transform: translateX(3px);
   }
 }
 
