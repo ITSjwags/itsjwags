@@ -3,12 +3,12 @@ import { companies } from '../data/experience';
 import SectionLabel from './SectionLabel.astro';
 ---
 
-<section class="border-t border-border py-[60px]">
+<section class="border-t border-border py-10 sm:py-[60px]">
   <div class="mb-2">
     <SectionLabel index="03" label="BEEN AT THIS A WHILE" />
   </div>
-  <p class="mb-8 max-w-[600px] text-[17px] leading-[1.6] text-muted">
-    Currently a Staff Software Engineer at ZenBusiness. Full history's in the
+  <p class="mb-8 max-w-[600px] text-[16px] leading-[1.5] text-muted sm:text-[17px] sm:leading-[1.6]">
+    Currently a Staff Software Engineer at ZenBusiness. Full history's in the{' '}
     <a href="/resume/JonathanWagoner-Resume2026.pdf" download class="text-accent underline">resume</a>.
   </p>
   <div class="flex flex-col">
@@ -18,9 +18,9 @@ import SectionLabel from './SectionLabel.astro';
           href={company.url}
           target="_blank"
           rel="noopener"
-          class="flex items-baseline justify-between border-b border-border py-[18px] text-fg-2 no-underline hover:text-accent"
+          class="flex flex-col gap-0.5 border-b border-border py-3.5 text-fg-2 no-underline hover:text-accent sm:flex-row sm:items-baseline sm:justify-between sm:gap-0 sm:py-[18px]"
         >
-          <span class="font-display text-2xl font-semibold">{company.name}</span>
+          <span class="font-display text-xl font-semibold sm:text-2xl">{company.name}</span>
           <span class="font-mono text-[13px] text-muted-2">{company.role} ↗</span>
         </a>
       ))
