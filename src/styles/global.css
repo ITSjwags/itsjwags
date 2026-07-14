@@ -173,4 +173,7 @@
   .animate-golf-putt { animation: none; right: 14px; transform: scale(0); }
   .animate-float-up { animation: none; opacity: 1; transform: translateY(0); }
   .animate-on-scroll { animation: none; opacity: 1; }
+  a, button, .link-underline::after, .arrow-glyph, .arrow-glyph-right, [data-theme-thumb] {
+    transition: none;
+  }
 }
