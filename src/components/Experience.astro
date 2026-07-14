@@ -9,19 +9,23 @@ import Section from './Section.astro';
     Currently a Staff Software Engineer at ZenBusiness. Full history's in the{' '}
     <a href={RESUME_PATH} download class="text-accent underline">resume</a>.
   </p>
-  <div class="flex flex-col">
+  <ul class="m-0 flex list-none flex-col p-0">
     {
       companies.map((company) => (
-        <a
-          href={company.url}
-          target="_blank"
-          rel="noopener"
-          class="flex flex-col gap-0.5 border-b border-border py-3.5 text-fg-2 no-underline hover:text-accent sm:flex-row sm:items-baseline sm:justify-between sm:gap-0 sm:py-[18px]"
-        >
-          <span class="font-display text-xl font-semibold sm:text-2xl">{company.name}</span>
-          <span class="text-label text-muted-2">{company.role} ↗</span>
-        </a>
+        <li>
+          <a
+            href={company.url}
+            target="_blank"
+            rel="noopener"
+            class="flex flex-col gap-0.5 border-b border-border py-3.5 text-fg-2 no-underline hover:text-accent sm:flex-row sm:items-baseline sm:justify-between sm:gap-0 sm:py-[18px]"
+          >
+            <span class="font-display text-xl font-semibold sm:text-2xl">{company.name}</span>
+            <span class="text-label text-muted-2">
+              {company.role} ↗<span class="sr-only"> (opens in new tab)</span>
+            </span>
+          </a>
+        </li>
       ))
     }
-  </div>
+  </ul>
 </Section>

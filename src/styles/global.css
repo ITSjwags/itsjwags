@@ -17,10 +17,6 @@
 }
 
 :root {
-  /* Fixed across both themes in the source design — not swapped by [data-theme] */
-  --muted: #8a8378;
-  --muted-2: #6b655a;
-  --on-accent: #131210;
   --app-font-display: 'Space Grotesk', sans-serif;
   --app-font-mono: 'JetBrains Mono', monospace;
 }
@@ -33,6 +29,16 @@
   --fg3: #c9c2b4;
   --border: #2a2620;
   --accent: #e8b84b;
+  /* The source design used one fixed grey per muted tier across both
+     themes; #8a8378/#6b655a fail WCAG AA against a light background
+     (3.51:1 / 3.24:1 on dark — see /simplify accessibility audit).
+     Values below hit ~7:1 / ~4.6:1 in each theme while preserving the
+     original two-tier hierarchy (muted more prominent than muted-2). */
+  --muted: #a49e94;
+  --muted-2: #847d71;
+  /* Matches --bg: near-black button text reads correctly on the bright
+     dark-theme accent gold. */
+  --on-accent: var(--bg);
 }
 
 [data-theme="light"] {
@@ -42,6 +48,11 @@
   --fg3: #4a453c;
   --border: #e4ddd0;
   --accent: #93641a;
+  --muted: #59544c;
+  --muted-2: #767065;
+  /* Matches --bg: the darker light-theme accent needs light text, not
+     dark — #131210 on #93641a is only 3.64:1, fails AA. */
+  --on-accent: var(--bg);
 }
 
 @layer base {
