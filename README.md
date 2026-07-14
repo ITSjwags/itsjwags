@@ -10,6 +10,8 @@ Personal site for Jonathan Wagoner — frontend engineer.
 
 ## Getting started
 
+Requires Node.js 24+.
+
 ```bash
 yarn install
 yarn dev   # http://localhost:4321
