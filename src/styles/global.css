@@ -1,0 +1,179 @@
+@import "tailwindcss";
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-fg: var(--fg);
+  --color-fg-2: var(--fg2);
+  --color-fg-3: var(--fg3);
+  --color-border: var(--border);
+  --color-accent: var(--accent);
+  --color-muted: var(--muted);
+  --color-muted-2: var(--muted-2);
+  --color-on-accent: var(--on-accent);
+  --font-display: var(--app-font-display);
+  --font-mono: var(--app-font-mono);
+  --text-label: 13px;
+  --text-label--line-height: 1;
+}
+
+:root {
+  --app-font-display: 'Space Grotesk', sans-serif;
+  --app-font-mono: 'JetBrains Mono', monospace;
+}
+
+:root,
+[data-theme="dark"] {
+  --bg: #131210;
+  --fg: #f2ede4;
+  --fg2: #e9e3d8;
+  --fg3: #c9c2b4;
+  --border: #2a2620;
+  --accent: #e8b84b;
+  /* The source design used one fixed grey per muted tier across both
+     themes; #8a8378/#6b655a fail WCAG AA against a light background
+     (3.51:1 / 3.24:1 on dark — see /simplify accessibility audit).
+     Values below hit ~7:1 / ~4.6:1 in each theme while preserving the
+     original two-tier hierarchy (muted more prominent than muted-2). */
+  --muted: #a49e94;
+  --muted-2: #847d71;
+  /* Matches --bg: near-black button text reads correctly on the bright
+     dark-theme accent gold. */
+  --on-accent: var(--bg);
+}
+
+[data-theme="light"] {
+  --bg: #faf7f1;
+  --fg: #1c1a15;
+  --fg2: #2a2620;
+  --fg3: #4a453c;
+  --border: #e4ddd0;
+  --accent: #93641a;
+  --muted: #59544c;
+  --muted-2: #767065;
+  /* Matches --bg: the darker light-theme accent needs light text, not
+     dark — #131210 on #93641a is only 3.64:1, fails AA. */
+  --on-accent: var(--bg);
+}
+
+@layer base {
+  body {
+    @apply font-mono bg-bg text-fg min-h-screen;
+    margin: 0;
+  }
+  h1, h2, h3 {
+    @apply font-display;
+  }
+  a {
+    color: inherit;
+  }
+  a, button {
+    transition: color 150ms ease, background-color 150ms ease, opacity 150ms ease;
+  }
+  a:focus-visible, button:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+    border-radius: 2px;
+  }
+  [data-theme-thumb] {
+    left: 2px;
+  }
+  [data-theme='light'] [data-theme-thumb] {
+    left: 22px;
+  }
+  [data-theme='dark'] .label-light,
+  [data-theme='light'] .label-dark {
+    display: none;
+  }
+  ::selection {
+    background: #e8c66b;
+    color: #131210;
+  }
+  /* Plain text links (no arrow glyph): underline grows in from the left on
+     hover instead of sitting there statically. Uses currentColor so it
+     always matches whatever color the text transitions to. */
+  .link-underline {
+    position: relative;
+    text-decoration: none;
+  }
+  .link-underline::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -2px;
+    height: 1px;
+    background: currentColor;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 200ms ease;
+  }
+  .link-underline:hover::after {
+    transform: scaleX(1);
+  }
+  /* Arrow glyphs (↗/→): nudge in the direction they point on ancestor
+     link hover. Shared across every link that carries one, so the motion
+     language is consistent regardless of where the arrow appears. */
+  .arrow-glyph {
+    display: inline-block;
+    transition: transform 150ms ease;
+  }
+  a:hover .arrow-glyph {
+    transform: translate(2px, -2px);
+  }
+  .arrow-glyph-right {
+    display: inline-block;
+    transition: transform 150ms ease;
+  }
+  a:hover .arrow-glyph-right {
+    transform: translateX(3px);
+  }
+}
+
+@keyframes cursor-blink {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0; }
+}
+
+@keyframes drum-pulse {
+  0%, 100% { transform: scaleY(0.4); }
+  50% { transform: scaleY(1); }
+}
+
+@keyframes golf-putt {
+  0% { right: calc(100% - 20px); transform: scale(1); animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1); }
+  60% { transform: scale(1); animation-timing-function: ease-out; }
+  82% { transform: scale(0); }
+  100% { right: 14px; transform: scale(0); }
+}
+
+@keyframes float-up {
+  from { opacity: 0; transform: translateY(22px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-cursor-blink { animation: cursor-blink 1s step-end infinite; }
+.animate-drum-pulse { animation: drum-pulse 1.1s ease-in-out infinite; transform-origin: bottom; }
+.animate-golf-putt { animation: golf-putt 4.2s infinite; }
+.animate-float-up { animation: float-up 0.7s ease both; }
+
+/* Scroll-triggered reveal for below-the-fold sections (Base.astro's
+   IntersectionObserver adds .is-visible on first entry into viewport).
+   Hidden starting state is gated behind .js (set by the pre-paint script)
+   so content stays visible by default if JS fails to run. */
+.js .animate-on-scroll {
+  opacity: 0;
+}
+.animate-on-scroll.is-visible {
+  animation: float-up 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-cursor-blink { animation: none; opacity: 1; }
+  .animate-drum-pulse { animation: none; transform: scaleY(1); }
+  .animate-golf-putt { animation: none; right: 14px; transform: scale(0); }
+  .animate-float-up { animation: none; opacity: 1; transform: translateY(0); }
+  .animate-on-scroll { animation: none; opacity: 1; }
+  a, button, .link-underline::after, .arrow-glyph, .arrow-glyph-right, [data-theme-thumb] {
+    transition: none;
+  }
+}

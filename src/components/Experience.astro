@@ -1,0 +1,31 @@
+---
+import { companies } from '../data/experience';
+import { RESUME_PATH } from '../lib/constants';
+import Section from './Section.astro';
+---
+
+<Section index="03" label="BEEN AT THIS A WHILE" labelMargin="mb-2">
+  <p class="mb-8 max-w-[600px] text-[16px] leading-[1.5] text-muted sm:text-[17px] sm:leading-[1.6]">
+    Currently a Staff Software Engineer at ZenBusiness. Full history's in the{' '}
+    <a href={RESUME_PATH} download class="link-underline text-accent">resume</a>.
+  </p>
+  <ul class="m-0 flex list-none flex-col p-0">
+    {
+      companies.map((company) => (
+        <li>
+          <a
+            href={company.url}
+            target="_blank"
+            rel="noopener"
+            class="flex flex-col gap-0.5 border-b border-border py-3.5 text-fg-2 no-underline hover:text-accent sm:flex-row sm:items-baseline sm:justify-between sm:gap-0 sm:py-[18px]"
+          >
+            <span class="font-display text-xl font-semibold sm:text-2xl">{company.name}</span>
+            <span class="text-label text-muted-2">
+              {company.role} <span class="arrow-glyph">↗</span><span class="sr-only"> (opens in new tab)</span>
+            </span>
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+</Section>
