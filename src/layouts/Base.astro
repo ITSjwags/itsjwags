@@ -12,6 +12,20 @@ const {
 } = Astro.props;
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site).href;
+
+const personSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: 'Jonathan Wagoner',
+  jobTitle: 'Frontend Engineer',
+  url: 'https://itsjwags.com',
+  email: 'mailto:jvwagoner@gmail.com',
+  sameAs: ['https://linkedin.com/in/jonathanwagoner'],
+  worksFor: {
+    '@type': 'Organization',
+    name: 'ZenBusiness',
+  },
+};
 ---
 
 <!doctype html>
@@ -26,9 +40,14 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site).href;
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonicalURL} />
     <meta property="og:type" content="website" />
-    <meta name="twitter:card" content="summary" />
+    <meta property="og:image" content={new URL('/og-image.png', Astro.site).href} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={new URL('/og-image.png', Astro.site).href} />
+    <script type="application/ld+json" is:inline set:html={JSON.stringify(personSchema)} />
     <script is:inline>
       // Key must match THEME_STORAGE_KEY in src/lib/constants.ts — inline
       // scripts can't import modules and still run synchronously pre-paint.
