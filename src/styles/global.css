@@ -109,9 +109,19 @@
 .animate-golf-putt { animation: golf-putt 4.2s infinite; }
 .animate-float-up { animation: float-up 0.7s ease both; }
 
+/* Scroll-triggered reveal for below-the-fold sections (Base.astro's
+   IntersectionObserver adds .is-visible on first entry into viewport). */
+.animate-on-scroll {
+  opacity: 0;
+}
+.animate-on-scroll.is-visible {
+  animation: float-up 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .animate-cursor-blink { animation: none; opacity: 1; }
   .animate-drum-pulse { animation: none; transform: scaleY(1); }
   .animate-golf-putt { animation: none; right: 14px; transform: scale(0); }
   .animate-float-up { animation: none; opacity: 1; transform: translateY(0); }
+  .animate-on-scroll { animation: none; opacity: 1; }
 }

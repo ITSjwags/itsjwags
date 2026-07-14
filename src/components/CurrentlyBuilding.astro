@@ -2,20 +2,16 @@
 import { projects } from '../data/projects';
 import Button from './Button.astro';
 import Section from './Section.astro';
+
+// Design has one "currently building" spotlight, not a list — no wrapper
+// needed for a single item.
+const [project] = projects;
 ---
 
 <Section index="02" label="CURRENTLY BUILDING" labelMargin="mb-7 sm:mb-9">
-  <div class="flex flex-col gap-9">
-    {
-      projects.map((project) => (
-        <div>
-          <div class="mb-3.5 text-label font-medium text-muted">{project.eyebrow}</div>
-          <h3 class="mb-5 text-[clamp(2rem,8vw,3.25rem)] leading-[1.02] font-semibold">{project.name}</h3>
-          <p class="mb-6 max-w-[640px] text-[16px] leading-[1.6] text-fg-3 sm:text-[17px] sm:leading-[1.7]">{project.description}</p>
-          <p class="mb-7 text-label font-medium text-muted-2">{project.stack}</p>
-          <Button href={project.href}>See the project ↗</Button>
-        </div>
-      ))
-    }
-  </div>
+  <div class="mb-3.5 text-label font-medium text-muted">{project.eyebrow}</div>
+  <h3 class="mb-5 text-[clamp(2rem,8vw,3.25rem)] leading-[1.02] font-semibold">{project.name}</h3>
+  <p class="mb-6 max-w-[640px] text-[16px] leading-[1.6] text-fg-3 sm:text-[17px] sm:leading-[1.7]">{project.description}</p>
+  <p class="mb-7 text-label font-medium text-muted-2">{project.stack}</p>
+  <Button href={project.href}>See the project ↗</Button>
 </Section>

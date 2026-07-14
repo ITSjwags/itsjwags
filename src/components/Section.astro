@@ -16,9 +16,7 @@ const {
 } = Astro.props;
 ---
 
-<section class={`border-t border-border ${padding}`}>
-  <div class={labelMargin}>
-    <SectionLabel index={index} label={label} />
-  </div>
+<section class={`animate-on-scroll border-t border-border ${padding}`}>
+  <SectionLabel index={index} label={label} class={labelMargin} />
   <slot />
 </section>
