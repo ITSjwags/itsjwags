@@ -13,7 +13,7 @@ export const companies: Company[] = [
   {
     name: 'Baton',
     role: 'Lead Software Engineer, Frontend',
-    url: 'https://www.meetbaton.com',
+    url: 'https://www.baton.com',
   },
   { name: 'Sure', role: 'Senior Frontend Engineer', url: 'https://www.sureapp.com' },
   {
@@ -21,7 +21,7 @@ export const companies: Company[] = [
     role: 'Senior UI Engineer → Manager, UI Engineering',
     url: 'https://www.happymoney.com',
   },
-  { name: 'Bluewater', role: 'UI Developer', url: 'https://www.bluewatertg.com' },
+  { name: 'Bluewater', role: 'UI Developer', url: 'https://www.bluewatertech.com' },
   {
     name: 'Leveleleven',
     role: 'Senior UI Developer',

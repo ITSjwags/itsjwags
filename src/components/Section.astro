@@ -1,0 +1,24 @@
+---
+import SectionLabel from './SectionLabel.astro';
+
+interface Props {
+  index: string;
+  label: string;
+  padding?: string;
+  labelMargin?: string;
+}
+
+const {
+  index,
+  label,
+  padding = 'py-10 sm:py-[60px]',
+  labelMargin = 'mb-7',
+} = Astro.props;
+---
+
+<section class={`border-t border-border ${padding}`}>
+  <div class={labelMargin}>
+    <SectionLabel index={index} label={label} />
+  </div>
+  <slot />
+</section>

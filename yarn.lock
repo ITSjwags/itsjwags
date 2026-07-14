@@ -2,7 +2,7 @@
 # yarn lockfile v1
 
 
-"@astrojs/check@^0.9.9":
+"@astrojs/check@0.9.9":
   version "0.9.9"
   resolved "https://registry.yarnpkg.com/@astrojs/check/-/check-0.9.9.tgz#2609f8b030b61a524c54bf801cb6cd4790ed7892"
   integrity sha512-A5UW8uIuErLWEoRQvzgXpO1gTjUFtK8r7nU2Z7GewAMxUb7bPvpk11qaKKgxqXlHJWlAvaaxy+Xg28A6bmQ1Tg==
@@ -142,7 +142,7 @@
   dependencies:
     prismjs "^1.30.0"
 
-"@astrojs/sitemap@^3.7.3":
+"@astrojs/sitemap@3.7.3":
   version "3.7.3"
   resolved "https://registry.yarnpkg.com/@astrojs/sitemap/-/sitemap-3.7.3.tgz#f6eed62e414fef334146b853d7c56fe626994cf8"
   integrity sha512-f8euLVsyeAmAkSm/1M2Kb8sL8byQmfgbvBNaHFItCheTj/IpiJYSEWVcqDHZ/yEHxiS7+w87mQkzwZaPHmk5GA==
@@ -193,7 +193,7 @@
     "@babel/helper-string-parser" "^7.29.7"
     "@babel/helper-validator-identifier" "^7.29.7"
 
-"@biomejs/biome@^2.5.3":
+"@biomejs/biome@2.5.3":
   version "2.5.3"
   resolved "https://registry.yarnpkg.com/@biomejs/biome/-/biome-2.5.3.tgz#492a6b3f7b899cc060af1fb8210cf0cbf536df8d"
   integrity sha512-MrJswFdei9EfDwwUy2tQrPDpK0AO+RmMFvBoaaJ6ayBc3sUbHdCE+XG5N8vp+5So41ZupZJQm0roHFFhMGVD7A==
@@ -999,7 +999,7 @@
     "@tailwindcss/oxide-win32-arm64-msvc" "4.3.2"
     "@tailwindcss/oxide-win32-x64-msvc" "4.3.2"
 
-"@tailwindcss/vite@^4.3.2":
+"@tailwindcss/vite@4.3.2":
   version "4.3.2"
   resolved "https://registry.yarnpkg.com/@tailwindcss/vite/-/vite-4.3.2.tgz#35787e4d450a6b2430693245483441cfd78bf612"
   integrity sha512-eHpMeX4JXfVNJDEcsouTeCBubJBTcTLigeaw/NTUW6PB5ATKKXdyonnXgTBX2VuRbjz1hjfz6C5XAhr52ImQXA==
@@ -1214,7 +1214,7 @@ aria-query@^5.3.2:
   resolved "https://registry.yarnpkg.com/aria-query/-/aria-query-5.3.2.tgz#93f81a43480e33a338f19163a3d10a50c01dcd59"
   integrity sha512-COROpnaoap1E2F000S62r6A60uHZnmlvomhfyT2DlTcrY1OrBKn2UhH7qn5wTC9zMvD0AY7csdPSNwKP+7WiQw==
 
-astro@^7.0.8:
+astro@7.0.9:
   version "7.0.9"
   resolved "https://registry.yarnpkg.com/astro/-/astro-7.0.9.tgz#13a3446f7bf1a506575d424b7297fea624d673cb"
   integrity sha512-WB5pA4LLQnmqjBh6EIu0z8aUV4q2/AoThgSZq57Rsp+oqqvPu7OwZ5eF+W4ku20TUTxIhiJW8dccuGvJPiW2UA==
@@ -2374,7 +2374,7 @@ svgo@^4.0.1:
     picocolors "^1.1.1"
     sax "^1.5.0"
 
-tailwindcss@4.3.2, tailwindcss@^4.3.2:
+tailwindcss@4.3.2:
   version "4.3.2"
   resolved "https://registry.yarnpkg.com/tailwindcss/-/tailwindcss-4.3.2.tgz#408ee67d767a0fef7b174674bb9c5ce136a5ace1"
   integrity sha512-WtctNNSH8A9jlMIqxzuYumOHU5uGZyRv0Q5svQl+oEPy5w84YpBxdb7MdqyiSPQge5jTJ6zFQLq0PFygdccSBA==
@@ -2434,7 +2434,7 @@ typescript-auto-import-cache@^0.3.5:
   dependencies:
     semver "^7.3.8"
 
-typescript@^6.0.2:
+typescript@6.0.3:
   version "6.0.3"
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-6.0.3.tgz#90251dc007916e972786cb94d74d15b185577d21"
   integrity sha512-y2TvuxSZPDyQakkFRPZHKFm+KKVqIisdg9/CZwm9ftvKXLP8NRWj38/ODjNbr43SsoXqNuAisEf1GdCxqWcdBw==

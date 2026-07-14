@@ -11,28 +11,27 @@
 >
   <span
     data-theme-thumb
-    class="absolute top-0.5 left-0.5 h-4 w-4 rounded-full bg-accent transition-[left] duration-200 ease-out"
+    class="absolute top-0.5 h-4 w-4 rounded-full bg-accent transition-[left] duration-200 ease-out"
   ></span>
 </button>
 
 <script>
+  import { THEME_STORAGE_KEY } from '../lib/constants';
+
   const button = document.getElementById('theme-toggle');
-  const thumb = button?.querySelector<HTMLElement>('[data-theme-thumb]');
 
   function sync(theme: string) {
     const isLight = theme === 'light';
     button?.setAttribute('aria-checked', String(isLight));
     button?.setAttribute('aria-label', isLight ? 'Switch to dark theme' : 'Switch to light theme');
-    if (thumb) thumb.style.left = isLight ? '22px' : '2px';
   }
 
   button?.addEventListener('click', () => {
     const current = document.documentElement.dataset.theme ?? 'dark';
     const next = current === 'dark' ? 'light' : 'dark';
     document.documentElement.dataset.theme = next;
-    localStorage.setItem('theme', next);
+    localStorage.setItem(THEME_STORAGE_KEY, next);
     sync(next);
-    document.dispatchEvent(new CustomEvent('themechange', { detail: { theme: next } }));
   });
 
   sync(document.documentElement.dataset.theme ?? 'dark');

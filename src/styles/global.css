@@ -12,6 +12,8 @@
   --color-on-accent: var(--on-accent);
   --font-display: var(--app-font-display);
   --font-mono: var(--app-font-mono);
+  --text-label: 13px;
+  --text-label--line-height: 1;
 }
 
 :root {
@@ -52,6 +54,16 @@
   }
   a {
     color: inherit;
+  }
+  [data-theme-thumb] {
+    left: 2px;
+  }
+  [data-theme='light'] [data-theme-thumb] {
+    left: 22px;
+  }
+  [data-theme='dark'] .label-light,
+  [data-theme='light'] .label-dark {
+    display: none;
   }
   ::selection {
     background: #e8c66b;

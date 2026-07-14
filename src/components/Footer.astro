@@ -1,9 +1,10 @@
 ---
+import { RESUME_PATH } from '../lib/constants';
 ---
 
-<footer class="flex flex-wrap items-center justify-between gap-3 border-t border-border pt-8 pb-12 text-[13px] text-muted-2">
+<footer class="flex flex-wrap items-center justify-between gap-3 border-t border-border pt-8 pb-12 text-label text-muted-2">
   <span>© 2026 JONATHAN WAGONER</span>
-  <a href="/resume/JonathanWagoner-Resume2026.pdf" download class="text-accent no-underline">
+  <a href={RESUME_PATH} download class="text-accent no-underline">
     DOWNLOAD RESUME →
   </a>
 </footer>
