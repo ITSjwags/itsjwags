@@ -216,11 +216,14 @@
   50% { transform: scaleY(1); }
 }
 
-@keyframes golf-putt {
-  0% { right: calc(100% - 20px); transform: scale(1); animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1); }
-  60% { transform: scale(1); animation-timing-function: ease-out; }
-  82% { transform: scale(0); }
-  100% { right: 14px; transform: scale(0); }
+@keyframes drum-hit {
+  0% { transform: scaleY(1.7); }
+  100% { transform: scaleY(1); }
+}
+
+@keyframes flag-wave {
+  0%, 100% { transform: scaleX(1); }
+  50% { transform: scaleX(0.62); }
 }
 
 @keyframes float-up {
@@ -230,8 +233,31 @@
 
 .animate-cursor-blink { animation: cursor-blink 1s step-end infinite; }
 .animate-drum-pulse { animation: drum-pulse 1.1s ease-in-out infinite; transform-origin: bottom; }
-.animate-golf-putt { animation: golf-putt 4.2s infinite; }
 .animate-float-up { animation: float-up 0.7s ease both; }
+
+[data-golf-green] {
+  transition: filter 250ms ease;
+}
+[data-golf]:hover [data-golf-green],
+[data-golf]:focus-visible [data-golf-green] {
+  filter: brightness(1.18);
+}
+[data-golf-flag] {
+  transform-origin: left center;
+}
+[data-golf]:hover [data-golf-flag],
+[data-golf]:focus-visible [data-golf-flag] {
+  animation: flag-wave 1.15s ease-in-out infinite;
+}
+[data-bar] {
+  transition: filter 200ms ease, opacity 200ms ease;
+  opacity: 0.85;
+}
+[data-drums]:hover [data-bar],
+[data-drums]:focus-within [data-bar] {
+  opacity: 1;
+  filter: brightness(1.12);
+}
 
 /* Scroll-triggered reveal for below-the-fold sections (Base.astro's
    IntersectionObserver adds .is-visible on first entry into viewport).
@@ -247,10 +273,13 @@
 @media (prefers-reduced-motion: reduce) {
   .animate-cursor-blink { animation: none; opacity: 1; }
   .animate-drum-pulse { animation: none; transform: scaleY(1); }
-  .animate-golf-putt { animation: none; right: 14px; transform: scale(0); }
   .animate-float-up { animation: none; opacity: 1; transform: translateY(0); }
   .animate-on-scroll { animation: none; opacity: 1; }
-  a, button, .link-underline::after, .arrow-glyph, .arrow-glyph-right, .link-caret, .btn-caret, [data-theme-thumb], .hover-preview-card, .row-bg, .row-text {
+  [data-golf]:hover [data-golf-flag],
+  [data-golf]:focus-visible [data-golf-flag] {
+    animation: none;
+  }
+  a, button, .link-underline::after, .arrow-glyph, .arrow-glyph-right, .link-caret, .btn-caret, [data-theme-thumb], .hover-preview-card, .row-bg, .row-text, [data-golf-green], [data-bar] {
     transition: none;
   }
 }

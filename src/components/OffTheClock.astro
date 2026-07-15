@@ -1,36 +1,203 @@
 ---
+import HoverPreview from './HoverPreview.astro';
 import Section from './Section.astro';
+import SectionLabel from './SectionLabel.astro';
 
-const beats = Array.from({ length: 24 }, (_, i) => ({
-  h: `${20 + Math.round(Math.sin(i * 1.3) * 20 + 20)}%`,
-  delay: `${(i % 8) * 0.08}s`,
+const DRUM_HEIGHTS_PX = [
+  20, 36, 27.5, 14, 9, 20, 36, 27.5, 14, 9, 20, 36, 27.5, 14, 9, 20, 36, 27.5, 14, 9,
+];
+const DRUM_DELAYS_S = [0, 0.08, 0.16, 0.24, 0.32, 0.4, 0.48, 0.56];
+const bars = DRUM_HEIGHTS_PX.map((h, i) => ({
+  heightPct: `${Math.round((h / 36) * 100)}%`,
+  delay: `${DRUM_DELAYS_S[i % DRUM_DELAYS_S.length]}s`,
 }));
 ---
 
-<Section label="off the clock" padding="pt-10 pb-12 sm:pt-[60px] sm:pb-[80px]">
-  <div class="grid grid-cols-1 items-end gap-8 sm:grid-cols-2 sm:gap-14">
-    <div>
-      <p class="m-0 mb-4 font-display text-[17px] font-semibold text-fg-2">Golf, decently, and often</p>
-      <div class="relative h-16 w-full" aria-hidden="true">
-        <div class="absolute inset-x-0 bottom-0 h-6 rounded-full bg-[#2f4a34]"></div>
-        <div class="absolute right-3.5 bottom-[9px] h-[5px] w-2.5 rounded-full bg-on-accent"></div>
-        <div class="absolute right-[18px] bottom-[9px] h-[31px] w-0.5 bg-accent"></div>
-        <div class="absolute right-[9px] bottom-7 h-0 w-0 border-y-[5px] border-l-[9px] border-y-transparent border-l-accent"></div>
-        <div class="animate-golf-putt absolute bottom-1.5 h-3 w-3 rounded-full bg-[#f2ede4]"></div>
+<Section class="border-t border-border">
+  <div class="flex flex-col gap-10">
+    <div class="flex flex-col gap-4">
+      <div class="flex items-center justify-between">
+        <SectionLabel label="off the clock" class="mb-0" />
+        <button
+          id="mute-toggle"
+          type="button"
+          aria-pressed="false"
+          class="cursor-pointer text-[14px] font-medium text-muted hover:text-accent"
+        >
+          <span data-mute-label>sound: on</span>
+        </button>
       </div>
+      <p class="m-0 font-display text-[18px] leading-[28px] font-light text-fg-3 min-[561px]:text-[20px] min-[561px]:leading-[32px]">
+        In my spare time, I enjoy{' '}
+        <HoverPreview id="golf" previewSrc="/photos/golf-hover.jpg" previewAlt="Golfing" width={240} height={240}>
+          <span class="cursor-pointer text-fg">golfing</span>
+        </HoverPreview>{' '}
+        as often as I can and playing the{' '}
+        <HoverPreview id="drums" previewSrc="/photos/drums-hover.jpg" previewAlt="Playing drums" width={240} height={240}>
+          <span class="cursor-pointer text-fg">drums</span>
+        </HoverPreview>{' '}
+        loudly on the weekends.
+      </p>
     </div>
-    <div>
-      <p class="m-0 mb-4 font-display text-[17px] font-semibold text-fg-2">Drums, loudly, on weekends</p>
-      <div class="flex h-16 items-end gap-[5px]" aria-hidden="true">
-        {
-          beats.map((beat) => (
-            <div
-              class="animate-drum-pulse flex-1 rounded-[1px] bg-accent"
-              style={{ height: beat.h, animationDelay: beat.delay }}
-            />
-          ))
-        }
+    <div class="flex flex-row items-start gap-10 max-[720px]:flex-col max-[720px]:items-stretch">
+      <div class="flex flex-1 flex-col gap-8">
+        <h3 class="m-0 font-mono text-[14px] font-medium text-fg">
+          golf: decently and often<span data-golf-count aria-live="polite" class="text-accent"></span>
+        </h3>
+        <button
+          type="button"
+          data-golf
+          aria-label="Putt the golf ball"
+          title="Click to putt"
+          class="relative h-9 w-full cursor-pointer appearance-none border-0 bg-transparent p-0"
+        >
+          <span data-golf-green class="absolute top-4 left-0 h-5 w-full overflow-hidden rounded-full bg-[#264c32]"></span>
+          <span class="absolute top-6 right-[14px] h-1 w-[10px] rounded-full bg-black/35"></span>
+          <span class="absolute -top-1 right-[18px] h-[30px] w-0.5 bg-accent"></span>
+          <span
+            data-golf-flag
+            class="absolute -top-0.5 right-[9px] h-0 w-0 border-y-[5px] border-l-[9px] border-y-transparent border-l-accent"
+          ></span>
+          <span data-golf-ball class="absolute top-[22px] left-[6px] h-2 w-2 rounded-full bg-[#f3ede3]"></span>
+        </button>
+      </div>
+      <div class="flex flex-1 flex-col gap-8">
+        <h3 class="m-0 font-mono text-[14px] font-medium text-fg">drums: loudly on weekends</h3>
+        <div
+          data-drums
+          role="group"
+          aria-label="Drum pads"
+          class="flex h-9 items-end gap-1"
+          style="touch-action:none"
+        >
+          {
+            bars.map((bar, i) => (
+              <button
+                type="button"
+                data-bar
+                aria-label={`Hit drum ${i + 1}`}
+                class="animate-drum-pulse origin-bottom flex-1 cursor-pointer appearance-none rounded-[1px] border-0 bg-accent p-0"
+                style={{ height: bar.heightPct, animationDelay: bar.delay }}
+              />
+            ))
+          }
+        </div>
       </div>
     </div>
   </div>
 </Section>
+
+<script>
+  import { isMuted, playDrumHit, playGolfDrop, playGolfTick, setMuted } from '../lib/audio';
+
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  const muteButton = document.getElementById('mute-toggle');
+  const muteLabel = muteButton?.querySelector('[data-mute-label]');
+  function syncMuteUI() {
+    const muted = isMuted();
+    muteButton?.setAttribute('aria-pressed', String(muted));
+    if (muteLabel) muteLabel.textContent = muted ? 'sound: off' : 'sound: on';
+  }
+  muteButton?.addEventListener('click', () => {
+    setMuted(!isMuted());
+    syncMuteUI();
+  });
+  syncMuteUI();
+
+  const golf = document.querySelector<HTMLElement>('[data-golf]');
+  const ball = golf?.querySelector<HTMLElement>('[data-golf-ball]');
+  const flag = golf?.querySelector<HTMLElement>('[data-golf-flag]');
+  const golfCount = document.querySelector<HTMLElement>('[data-golf-count]');
+
+  if (golf && ball) {
+    let golfBusy = false;
+    let makes = 0;
+    const travelMs = prefersReducedMotion ? 0 : 850;
+    const settleDelayMs = prefersReducedMotion ? 0 : 860;
+    const settleMs = prefersReducedMotion ? 0 : 220;
+    const resetDelayMs = prefersReducedMotion ? 0 : 1320;
+
+    golf.addEventListener('click', () => {
+      if (golfBusy) return;
+      golfBusy = true;
+      const holeX = golf.clientWidth - 23;
+
+      ball.style.transition = 'none';
+      ball.style.left = '6px';
+      ball.style.transform = 'scale(1)';
+      ball.style.opacity = '1';
+      void ball.offsetWidth;
+      ball.style.transition = `left ${travelMs}ms cubic-bezier(0.16,1,0.3,1)`;
+      ball.style.left = `${holeX}px`;
+      playGolfTick();
+
+      setTimeout(() => {
+        ball.style.transition = `transform ${settleMs}ms ease, opacity ${settleMs}ms ease`;
+        ball.style.transform = 'scale(0)';
+        ball.style.opacity = '0';
+        playGolfDrop();
+        if (flag && !prefersReducedMotion) {
+          flag.animate(
+            [
+              { transform: 'rotate(0deg)' },
+              { transform: 'rotate(-16deg)' },
+              { transform: 'rotate(12deg)' },
+              { transform: 'rotate(0deg)' },
+            ],
+            { duration: 460, easing: 'ease-out' },
+          );
+        }
+        makes += 1;
+        if (golfCount) golfCount.textContent = ` · ${makes} sunk`;
+      }, settleDelayMs);
+
+      setTimeout(() => {
+        ball.style.transition = 'none';
+        ball.style.left = '6px';
+        ball.style.transform = 'scale(1)';
+        ball.style.opacity = '1';
+        golfBusy = false;
+      }, resetDelayMs);
+    });
+  }
+
+  const strip = document.querySelector<HTMLElement>('[data-drums]');
+  if (strip) {
+    const bars = Array.from(strip.querySelectorAll<HTMLElement>('[data-bar]'));
+    let pointerDown = false;
+
+    const hit = (bar: HTMLElement, index: number) => {
+      playDrumHit(120 + (index / Math.max(1, bars.length)) * 300);
+      if (prefersReducedMotion) return;
+      const idleAnimation = bar.dataset.idleAnimation ?? '';
+      bar.style.animation = 'drum-hit 300ms ease';
+      window.clearTimeout(Number(bar.dataset.restoreTimer));
+      const timer = window.setTimeout(() => {
+        bar.style.animation = idleAnimation;
+      }, 300);
+      bar.dataset.restoreTimer = String(timer);
+    };
+
+    bars.forEach((bar, index) => {
+      bar.dataset.idleAnimation = getComputedStyle(bar).animation;
+      bar.addEventListener('pointerdown', () => {
+        pointerDown = true;
+        hit(bar, index);
+      });
+      bar.addEventListener('pointerenter', () => {
+        if (pointerDown) hit(bar, index);
+      });
+      bar.addEventListener('click', (e) => {
+        // Keyboard activation (Enter/Space) fires a click with detail === 0
+        // and no prior pointerdown — real mouse clicks are already handled
+        // above, so only react here to avoid double-hitting.
+        if (e.detail === 0) hit(bar, index);
+      });
+    });
+
+    window.addEventListener('pointerup', () => {
+      pointerDown = false;
+    });
+  }
+</script>
