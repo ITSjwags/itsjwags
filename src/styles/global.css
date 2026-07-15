@@ -281,11 +281,24 @@
   animation: float-up 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
+/* Every TypewriterText instance starts hidden behind this wrapper —
+   otherwise the full static text (and cursor, if present) flashes
+   visible on first paint, then vanishes when the script clears it to
+   start typing. Text and cursor are wrapped together so they reveal as
+   one unit instead of the cursor blinking alone first. Scroll-triggered
+   instances (SectionLabel) are already hidden by their .animate-on-scroll
+   ancestor, but this still applies for the moment between that ancestor
+   fading in and typing actually starting. */
+.js .jw-type-wrap {
+  opacity: 0;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .animate-cursor-blink { animation: none; opacity: 1; }
   .animate-drum-pulse { animation: none; transform: scaleY(1); }
   .animate-float-up { animation: none; opacity: 1; transform: translateY(0); }
   .animate-on-scroll { animation: none; opacity: 1; }
+  .jw-type-wrap { opacity: 1; }
   [data-golf]:hover [data-golf-flag],
   [data-golf]:focus-visible [data-golf-flag] {
     animation: none;

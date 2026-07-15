@@ -1,5 +1,6 @@
 ---
 import HoverPreview from './HoverPreview.astro';
+import TypewriterText from './TypewriterText.astro';
 ---
 
 <header class="animate-float-up flex flex-col gap-8 pt-13 pb-13 min-[561px]:pt-16 min-[561px]:pb-16 min-[721px]:pt-28 min-[721px]:pb-28">
@@ -15,7 +16,7 @@ import HoverPreview from './HoverPreview.astro';
     </div>
     <div class="flex flex-col gap-2.5">
       <p class="m-0 text-[14px] font-medium text-accent">
-        <span>&gt; frontend engineer</span><span class="animate-cursor-blink">_</span>
+        <TypewriterText text="frontend engineer" id="hero-eyebrow" cursor />
       </p>
       <h1 class="m-0 font-display text-[34px] leading-none font-medium min-[561px]:text-[54px]">
         Jonathan Wagoner
@@ -73,3 +74,16 @@ import HoverPreview from './HoverPreview.astro';
     </a>
   </div>
 </header>
+
+<script>
+  import { typewriter } from '../lib/typewriter';
+
+  const el = document.querySelector<HTMLElement>('[data-jw-id="hero-eyebrow"]');
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  if (el && !prefersReducedMotion) {
+    // Starts shortly after the header's "> jw" begins, so the two read as
+    // one staggered sequence.
+    setTimeout(() => typewriter(el), 200);
+  }
+</script>

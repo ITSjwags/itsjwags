@@ -1,0 +1,14 @@
+---
+interface Props {
+  text: string;
+  cursor?: boolean;
+  // Set on instances a page-load script targets directly (TopBar, Hero).
+  // Scroll-triggered instances (SectionLabel) omit it — Base.astro's
+  // IntersectionObserver finds them generically via [data-jw-type].
+  id?: string;
+}
+
+const { text, cursor = false, id } = Astro.props;
+---
+
+&gt; <span class="jw-type-wrap"><span data-jw-type data-jw-id={id}>{text}</span>{cursor && <span class="animate-cursor-blink">_</span>}</span>
