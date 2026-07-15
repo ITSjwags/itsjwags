@@ -127,6 +127,54 @@
   a:hover .arrow-glyph-right {
     transform: translateX(3px);
   }
+  /* Trailing ">" caret, hidden until hover/focus and sliding in — for
+     compact contact-link rows. Distinct from .arrow-glyph, which stays
+     visible and just nudges: this one is absent until interaction. */
+  .link-caret {
+    display: inline-block;
+    opacity: 0;
+    transform: translateX(-5px);
+    transition:
+      opacity 200ms ease,
+      transform 200ms ease;
+  }
+  a:hover .link-caret,
+  a:focus-visible .link-caret {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  /* Cursor-following photo card shown on hover/focus of a HoverPreview
+     trigger. Background stays a fixed white "photo card" regardless of
+     theme — it represents a physical photo, not themed UI chrome. */
+  .hover-preview-card {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 50;
+    padding: 5px;
+    border-radius: 14px;
+    background: #fff;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.22);
+    opacity: 0;
+    transform: scale(0.55);
+    transform-origin: 0 0;
+    pointer-events: none;
+    backface-visibility: hidden;
+    will-change: transform, opacity;
+    transition:
+      opacity 180ms ease,
+      transform 180ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .hover-preview-card img {
+    display: block;
+    /* Explicit width/height (not just the HTML attributes) because
+       Tailwind's preflight resets img to max-width:100%/height:auto,
+       which otherwise shrinks these below their intended display size. */
+    width: var(--hp-w);
+    height: var(--hp-h);
+    border-radius: 10px;
+    object-fit: cover;
+  }
 }
 
 @keyframes cursor-blink {
@@ -173,7 +221,7 @@
   .animate-golf-putt { animation: none; right: 14px; transform: scale(0); }
   .animate-float-up { animation: none; opacity: 1; transform: translateY(0); }
   .animate-on-scroll { animation: none; opacity: 1; }
-  a, button, .link-underline::after, .arrow-glyph, .arrow-glyph-right, [data-theme-thumb] {
+  a, button, .link-underline::after, .arrow-glyph, .arrow-glyph-right, .link-caret, [data-theme-thumb], .hover-preview-card {
     transition: none;
   }
 }
