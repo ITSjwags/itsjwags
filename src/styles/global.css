@@ -47,11 +47,11 @@
   --fg2: #2a2620;
   --fg3: #4a453c;
   --border: #e4ddd0;
-  --accent: #93641a;
+  --accent: #9b6100;
   --muted: #59544c;
   --muted-2: #767065;
   /* Matches --bg: the darker light-theme accent needs light text, not
-     dark — #131210 on #93641a is only 3.64:1, fails AA. */
+     dark — #131210 on #9b6100 is only 3.66:1, fails AA. */
   --on-accent: var(--bg);
 }
 
