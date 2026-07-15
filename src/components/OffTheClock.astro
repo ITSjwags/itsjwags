@@ -67,8 +67,7 @@ const bars = DRUM_HEIGHTS_PX.map((h, i) => ({
           data-drums
           role="group"
           aria-label="Drum pads"
-          class="flex h-9 items-end gap-1"
-          style="touch-action:none"
+          class="flex h-9 touch-none items-end gap-1"
         >
           {
             bars.map((bar, i) => (
@@ -110,13 +109,15 @@ const bars = DRUM_HEIGHTS_PX.map((h, i) => ({
   const flag = golf?.querySelector<HTMLElement>('[data-golf-flag]');
   const golfCount = document.querySelector<HTMLElement>('[data-golf-count]');
 
+  const motion = (ms: number) => (prefersReducedMotion ? 0 : ms);
+
   if (golf && ball) {
     let golfBusy = false;
     let makes = 0;
-    const travelMs = prefersReducedMotion ? 0 : 850;
-    const settleDelayMs = prefersReducedMotion ? 0 : 860;
-    const settleMs = prefersReducedMotion ? 0 : 220;
-    const resetDelayMs = prefersReducedMotion ? 0 : 1320;
+    const travelMs = motion(850);
+    const settleDelayMs = motion(860);
+    const settleMs = motion(220);
+    const resetDelayMs = motion(1320);
 
     golf.addEventListener('click', () => {
       if (golfBusy) return;
@@ -171,6 +172,12 @@ const bars = DRUM_HEIGHTS_PX.map((h, i) => ({
       playDrumHit(120 + (index / Math.max(1, bars.length)) * 300);
       if (prefersReducedMotion) return;
       const idleAnimation = bar.dataset.idleAnimation ?? '';
+      // Setting the same animation value while it's still playing (e.g.
+      // rapid repeat clicks) is a no-op in CSS — nothing restarts. Clearing
+      // it and forcing a reflow before reapplying makes every hit restart
+      // the animation from scratch, even mid-animation.
+      bar.style.animation = 'none';
+      void bar.offsetWidth;
       bar.style.animation = 'drum-hit 300ms ease';
       window.clearTimeout(Number(bar.dataset.restoreTimer));
       const timer = window.setTimeout(() => {
