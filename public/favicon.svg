@@ -3,11 +3,11 @@
   <rect width="32" height="32" rx="6" fill="#131210" />
   <text
     x="16"
-    y="21"
+    y="20"
     text-anchor="middle"
     font-family="'JetBrains Mono', monospace"
-    font-weight="600"
-    font-size="13"
+    font-weight="700"
+    font-size="12"
     fill="#e8b84b"
-  >JW</text>
+  >&gt;<tspan fill="#f2ede4">jw</tspan></text>
 </svg>

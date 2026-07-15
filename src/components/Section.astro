@@ -7,6 +7,10 @@ interface Props {
   labelMargin?: string;
   class?: string;
   animateSection?: boolean;
+  // For callers that render their own SectionLabel manually (e.g.
+  // CurrentlyBuilding's nested eyebrow) instead of passing `label` — lets
+  // them still give the section an accessible name pointing at that label.
+  ariaLabelledby?: string;
 }
 
 const {
@@ -19,10 +23,25 @@ const {
   // static background that happens to share the section's box. Those
   // callers apply .animate-on-scroll to their own content wrapper instead.
   animateSection = true,
+  ariaLabelledby,
 } = Astro.props;
+
+// A section without an accessible name isn't exposed as a navigable
+// "region" landmark, even with a visible heading right at its start —
+// giving it one via aria-labelledby fixes that for screen reader users
+// who jump between landmarks.
+const labelId = label
+  ? `section-label-${label
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/(^-|-$)/g, '')}`
+  : undefined;
 ---
 
-<section class={`${animateSection ? 'animate-on-scroll' : ''} ${padding} ${className}`}>
-  {label && <SectionLabel label={label} class={labelMargin} />}
+<section
+  class={`${animateSection ? 'animate-on-scroll' : ''} ${padding} ${className}`}
+  aria-labelledby={ariaLabelledby ?? labelId}
+>
+  {label && <SectionLabel label={label} id={labelId} class={labelMargin} />}
   <slot />
 </section>

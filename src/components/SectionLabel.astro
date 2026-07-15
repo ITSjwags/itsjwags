@@ -4,11 +4,12 @@ import TypewriterText from './TypewriterText.astro';
 interface Props {
   label: string;
   class?: string;
+  id?: string;
 }
 
-const { label, class: className = '' } = Astro.props;
+const { label, class: className = '', id } = Astro.props;
 ---
 
-<h2 class={`font-mono text-[14px] font-medium text-accent ${className}`}>
+<h2 id={id} class={`font-mono text-[14px] font-medium text-accent ${className}`}>
   <TypewriterText text={label} cursor />
 </h2>
