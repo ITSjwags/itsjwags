@@ -52,7 +52,11 @@ const personSchema = {
       // 'jw-theme' key is duplicated in ThemeToggle.astro (see src/lib/constants.ts
       // for why) — keep both in sync if it ever changes.
       (function () {
-        var theme = localStorage.getItem('jw-theme') || 'dark';
+        var stored = localStorage.getItem('jw-theme');
+        // Only a first-time visitor (no stored choice yet) gets the OS
+        // preference — once someone actively toggles, that explicit choice
+        // always wins on later visits, even if it differs from the system.
+        var theme = stored || (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
         document.documentElement.dataset.theme = theme;
         // Gates .animate-on-scroll's hidden starting state (see global.css) —
         // without this, content stays invisible forever if JS fails to run.

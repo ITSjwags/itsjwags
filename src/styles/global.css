@@ -21,6 +21,17 @@
   --app-font-mono: 'JetBrains Mono', monospace;
 }
 
+/* Disable the browser's default cross-fade so the theme toggle's
+   circular-wipe animation (driven manually via Web Animations API on
+   ::view-transition-new(root)) is the only motion — without
+   mix-blend-mode:normal, the two snapshots blend and ghost visibly
+   during the wipe. */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
 :root,
 [data-theme="dark"] {
   --bg: #131210;
