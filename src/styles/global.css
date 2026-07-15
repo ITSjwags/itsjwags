@@ -39,20 +39,27 @@
   /* Matches --bg: near-black button text reads correctly on the bright
      dark-theme accent gold. */
   --on-accent: var(--bg);
+  --plus: rgba(242, 237, 228, 0.045);
+  --plus-strong: rgba(232, 184, 75, 0.16);
 }
 
 [data-theme="light"] {
-  --bg: #faf7f1;
-  --fg: #1c1a15;
-  --fg2: #2a2620;
-  --fg3: #4a453c;
-  --border: #e4ddd0;
+  --bg: #fcf7f0;
+  --fg: #1c1a13;
+  --fg2: #1c1a13;
+  --fg3: #5a544b;
+  --border: #e6ddd0;
   --accent: #9b6100;
-  --muted: #59544c;
-  --muted-2: #767065;
-  /* Matches --bg: the darker light-theme accent needs light text, not
-     dark — #131210 on #9b6100 is only 3.66:1, fails AA. */
-  --on-accent: var(--bg);
+  /* Unlike dark theme, the reference's light-theme muted/muted-2 share one
+     value — it independently passes AA (~7:1 against --bg) on its own, so
+     the two-tier split dark theme needs isn't necessary here. */
+  --muted: #5a544b;
+  --muted-2: #5a544b;
+  /* Reference declares this explicitly rather than reusing --bg — the two
+     aren't the same value in light theme (unlike dark, where they match). */
+  --on-accent: #ffffff;
+  --plus: rgba(28, 26, 19, 0.045);
+  --plus-strong: rgba(155, 97, 0, 0.15);
 }
 
 @layer base {
@@ -143,6 +150,26 @@
     opacity: 1;
     transform: translateX(0);
   }
+  /* Trailing ">" on buttons: collapsed via max-width at rest instead of
+     .link-caret's translateX slide, matching the reference's separate
+     button-specific caret mechanism. */
+  .btn-caret {
+    display: inline-block;
+    max-width: 0;
+    margin-left: 0;
+    overflow: hidden;
+    opacity: 0;
+    transition:
+      max-width 240ms ease,
+      opacity 200ms ease,
+      margin-left 240ms ease;
+  }
+  a:hover .btn-caret,
+  a:focus-visible .btn-caret {
+    max-width: 1.4em;
+    margin-left: 8px;
+    opacity: 1;
+  }
   /* Cursor-following photo card shown on hover/focus of a HoverPreview
      trigger. Background stays a fixed white "photo card" regardless of
      theme — it represents a physical photo, not themed UI chrome. */
@@ -221,7 +248,7 @@
   .animate-golf-putt { animation: none; right: 14px; transform: scale(0); }
   .animate-float-up { animation: none; opacity: 1; transform: translateY(0); }
   .animate-on-scroll { animation: none; opacity: 1; }
-  a, button, .link-underline::after, .arrow-glyph, .arrow-glyph-right, .link-caret, [data-theme-thumb], .hover-preview-card {
+  a, button, .link-underline::after, .arrow-glyph, .arrow-glyph-right, .link-caret, .btn-caret, [data-theme-thumb], .hover-preview-card {
     transition: none;
   }
 }

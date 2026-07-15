@@ -2,21 +2,27 @@
 import SectionLabel from './SectionLabel.astro';
 
 interface Props {
-  label: string;
+  label?: string;
   padding?: string;
   labelMargin?: string;
   class?: string;
+  animateSection?: boolean;
 }
 
 const {
   label,
-  padding = 'py-10 sm:py-[60px]',
-  labelMargin = 'mb-7',
+  padding = 'pt-13 pb-13 min-[561px]:pt-16 min-[561px]:pb-16 min-[721px]:pt-20 min-[721px]:pb-20',
+  labelMargin = 'mb-4',
   class: className = '',
+  // Sections with a decorative background (e.g. the plus-grid) opt out —
+  // the scroll-reveal fade/slide belongs on the actual content, not on a
+  // static background that happens to share the section's box. Those
+  // callers apply .animate-on-scroll to their own content wrapper instead.
+  animateSection = true,
 } = Astro.props;
 ---
 
-<section class={`animate-on-scroll border-t border-border ${padding} ${className}`}>
-  <SectionLabel label={label} class={labelMargin} />
+<section class={`${animateSection ? 'animate-on-scroll' : ''} ${padding} ${className}`}>
+  {label && <SectionLabel label={label} class={labelMargin} />}
   <slot />
 </section>
