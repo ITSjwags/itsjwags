@@ -41,6 +41,7 @@
   --on-accent: var(--bg);
   --plus: rgba(242, 237, 228, 0.045);
   --plus-strong: rgba(232, 184, 75, 0.16);
+  --row-tint: rgba(255, 255, 255, 0.055);
 }
 
 [data-theme="light"] {
@@ -60,6 +61,7 @@
   --on-accent: #ffffff;
   --plus: rgba(28, 26, 19, 0.045);
   --plus-strong: rgba(155, 97, 0, 0.15);
+  --row-tint: rgba(28, 26, 19, 0.05);
 }
 
 @layer base {
@@ -248,7 +250,7 @@
   .animate-golf-putt { animation: none; right: 14px; transform: scale(0); }
   .animate-float-up { animation: none; opacity: 1; transform: translateY(0); }
   .animate-on-scroll { animation: none; opacity: 1; }
-  a, button, .link-underline::after, .arrow-glyph, .arrow-glyph-right, .link-caret, .btn-caret, [data-theme-thumb], .hover-preview-card {
+  a, button, .link-underline::after, .arrow-glyph, .arrow-glyph-right, .link-caret, .btn-caret, [data-theme-thumb], .hover-preview-card, .row-bg, .row-text {
     transition: none;
   }
 }

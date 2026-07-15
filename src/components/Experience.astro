@@ -5,8 +5,9 @@ import Section from './Section.astro';
 ---
 
 <Section label="been at this a while">
-  <p class="mb-8 max-w-[600px] text-[16px] leading-[1.5] text-muted sm:text-[17px] sm:leading-[1.6]">
-    Currently a Staff Software Engineer at ZenBusiness. Full history's in the{' '}
+  <p class="m-0 mb-10 font-display text-[18px] leading-[28px] font-light text-fg-3 min-[561px]:text-[20px] min-[561px]:leading-[32px]">
+    Throughout my career, I've worked on various projects, from building scalable systems to
+    designing user-friendly interfaces. Full history's in the{' '}
     <a href={RESUME_PATH} download class="link-underline text-accent">resume</a>.
   </p>
   <ul class="m-0 flex list-none flex-col p-0">
@@ -17,11 +18,22 @@ import Section from './Section.astro';
             href={company.url}
             target="_blank"
             rel="noopener"
-            class="flex flex-col gap-0.5 border-b border-border py-3.5 text-fg-2 no-underline hover:text-accent sm:flex-row sm:items-baseline sm:justify-between sm:gap-0 sm:py-[18px]"
+            class="company-row group relative flex flex-row items-center justify-between gap-4 py-4 text-fg no-underline max-[720px]:flex-col max-[720px]:items-start max-[720px]:gap-1"
           >
-            <span class="font-display text-xl font-semibold sm:text-2xl">{company.name}</span>
-            <span class="text-label text-muted-2">
-              {company.role} <span class="arrow-glyph">↗</span><span class="sr-only"> (opens in new tab)</span>
+            <span class="row-bg" aria-hidden="true" />
+            <span class="relative z-10 flex flex-row items-center gap-4">
+              <span
+                class="h-8 w-8 shrink-0 rounded-md bg-cover bg-center"
+                style={`background-image:url(${company.logo})`}
+              />
+              <span class="row-text font-display text-2xl leading-none font-medium text-fg group-hover:text-accent">
+                {company.name}
+              </span>
+            </span>
+            <span class="row-text relative z-10 inline-flex items-center justify-end text-right text-[14px] font-medium text-muted group-hover:text-accent max-[720px]:w-full max-[720px]:justify-start max-[720px]:text-left">
+              {company.role}
+              <span class="btn-caret">&nbsp;&gt;</span>
+              <span class="sr-only"> (opens in new tab)</span>
             </span>
           </a>
         </li>
@@ -29,3 +41,27 @@ import Section from './Section.astro';
     }
   </ul>
 </Section>
+
+<style>
+  .row-bg {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    width: 100vw;
+    transform: translateX(-50%);
+    z-index: 0;
+    opacity: 0;
+    pointer-events: none;
+    background: var(--row-tint);
+    -webkit-mask-image: linear-gradient(to right, transparent 0%, #000 9%, #000 91%, transparent 100%);
+    mask-image: linear-gradient(to right, transparent 0%, #000 9%, #000 91%, transparent 100%);
+    transition: opacity 320ms ease;
+  }
+  .company-row:hover .row-bg {
+    opacity: 1;
+  }
+  .row-text {
+    transition: color 220ms ease;
+  }
+</style>

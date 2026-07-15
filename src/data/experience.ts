@@ -2,30 +2,50 @@ export interface Company {
   name: string;
   role: string;
   url: string;
+  logo: string;
 }
 
 export const companies: Company[] = [
   {
     name: 'ZenBusiness',
-    role: 'Staff Software Engineer',
+    role: 'staff software engineer',
     url: 'https://www.zenbusiness.com',
+    logo: '/logos/zenbusiness.png',
   },
   {
     name: 'Baton',
-    role: 'Lead Software Engineer, Frontend',
+    role: 'lead software engineer, frontend',
     url: 'https://www.baton.com',
+    logo: '/logos/baton.png',
   },
-  { name: 'Sure', role: 'Senior Frontend Engineer', url: 'https://www.sureapp.com' },
+  {
+    name: 'Sure',
+    role: 'senior frontend engineer',
+    url: 'https://www.sureapp.com',
+    logo: '/logos/sure.png',
+  },
   {
     name: 'Happy Money',
-    role: 'Senior UI Engineer → Manager, UI Engineering',
+    role: 'senior ui engineer → manager, ui engineering',
     url: 'https://www.happymoney.com',
+    logo: '/logos/happymoney.png',
   },
-  { name: 'Bluewater', role: 'UI Developer', url: 'https://www.bluewatertech.com' },
   {
-    name: 'Leveleleven',
-    role: 'Senior UI Developer',
-    url: 'https://www.leveleleven.com',
+    name: 'Bluewater',
+    role: 'ui developer',
+    url: 'https://www.bluewatertech.com',
+    logo: '/logos/bluewater.png',
   },
-  { name: 'Helloworld', role: 'Interface Developer', url: 'https://www.helloworld.com' },
+  {
+    name: 'LevelEleven',
+    role: 'senior ui developer',
+    url: 'https://www.leveleleven.com',
+    logo: '/logos/leveleleven.png',
+  },
+  {
+    name: 'Helloworld',
+    role: 'interface developer',
+    url: 'https://www.helloworld.com',
+    logo: '/logos/helloworld.png',
+  },
 ];
