@@ -1,7 +1,9 @@
 ---
+import { Image } from 'astro:assets';
+
 interface Props {
   id: string;
-  previewSrc: string;
+  previewSrc: ImageMetadata;
   previewAlt: string;
   width: number;
   height: number;
@@ -20,7 +22,7 @@ const { id, previewSrc, previewAlt, width, height } = Astro.props;
   aria-hidden="true"
   style={`--hp-w:${width}px;--hp-h:${height}px`}
 >
-  <img src={previewSrc} alt={previewAlt} width={width} height={height} />
+  <Image src={previewSrc} alt={previewAlt} width={width} height={height} densities={[1, 2]} loading="eager" />
 </span>
 
 <script>
