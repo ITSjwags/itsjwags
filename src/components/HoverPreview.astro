@@ -60,15 +60,24 @@ const { id, previewSrc, previewAlt, width, height } = Astro.props;
         pop.style.transition = transition;
       });
 
-      trigger.addEventListener('pointerenter', () => {
+      // Touch has no persistent hover state to correctly reset from — a tap
+      // fires a simulated pointerenter but often no matching pointerleave
+      // once the finger lifts, leaving the card stuck open. The card is a
+      // decorative enhancement on top of a fully functional link/text, so
+      // it's skipped entirely for touch rather than chasing a reliable
+      // touch-dismiss signal.
+      trigger.addEventListener('pointerenter', (e) => {
+        if (e.pointerType === 'touch') return;
         pop.style.opacity = '1';
         pop.style.transform = 'scale(1)';
       });
       trigger.addEventListener('pointermove', (e) => {
+        if (e.pointerType === 'touch') return;
         pop.style.left = `${e.clientX + 14}px`;
         pop.style.top = `${e.clientY + 14}px`;
       });
-      trigger.addEventListener('pointerleave', () => {
+      trigger.addEventListener('pointerleave', (e) => {
+        if (e.pointerType === 'touch') return;
         pop.style.opacity = '0';
         pop.style.transform = 'scale(0.55)';
       });
