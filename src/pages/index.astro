@@ -9,9 +9,15 @@ import Base from '../layouts/Base.astro';
 ---
 
 <Base title="Jonathan Wagoner | Software Engineer, Frontend">
+  <a
+    href="#main-content"
+    class="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-50 focus:rounded-[2px] focus:bg-accent focus:px-4 focus:py-[11px] focus:font-mono focus:text-[14px] focus:font-medium focus:text-on-accent"
+  >
+    Skip to content
+  </a>
   <div class="mx-auto box-content max-w-[800px] px-5 min-[721px]:px-6">
     <TopBar />
-    <main>
+    <main id="main-content">
       <Hero />
       <CurrentlyBuilding />
       <Experience />
