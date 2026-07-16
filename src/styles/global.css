@@ -87,6 +87,10 @@
   }
   h1, h2, h3 {
     @apply font-display;
+    text-wrap: balance;
+  }
+  p {
+    text-wrap: pretty;
   }
   a {
     color: inherit;
