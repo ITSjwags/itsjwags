@@ -1,0 +1,88 @@
+---
+interface Props {
+  id: string;
+  previewSrc: string;
+  previewAlt: string;
+  width: number;
+  height: number;
+}
+
+const { id, previewSrc, previewAlt, width, height } = Astro.props;
+---
+
+<span class="cursor-pointer" data-hover-trigger={id}>
+  <slot />
+</span>
+
+<span
+  class="hover-preview-card block"
+  data-hover-pop={id}
+  aria-hidden="true"
+  style={`--hp-w:${width}px;--hp-h:${height}px`}
+>
+  <img src={previewSrc} alt={previewAlt} width={width} height={height} />
+</span>
+
+<script>
+  function bindHoverPreviews() {
+    const triggers = document.querySelectorAll<HTMLElement>('[data-hover-trigger]');
+
+    for (const trigger of triggers) {
+      const id = trigger.dataset.hoverTrigger;
+      const pop = document.querySelector<HTMLElement>(`[data-hover-pop="${id}"]`);
+      if (!pop) continue;
+
+      // Move the card to a direct child of <body>. Left nested in place,
+      // an animated ancestor (anything using the float-up scroll-reveal,
+      // which keeps a non-none `transform` via animation-fill-mode:both
+      // after it finishes) becomes this card's containing block instead
+      // of the viewport, breaking position:fixed positioning entirely.
+      document.body.appendChild(pop);
+
+      const img = pop.querySelector('img');
+      if (img?.decode) {
+        img.decode().catch(() => {});
+      }
+
+      // Warm-up: force one full off-screen paint (texture upload) so the
+      // first real hover animates smoothly instead of stuttering.
+      const transition = pop.style.transition;
+      pop.style.transition = 'none';
+      pop.style.left = '-9999px';
+      pop.style.opacity = '1';
+      pop.style.transform = 'scale(1)';
+      requestAnimationFrame(() => {
+        void pop.offsetWidth;
+        pop.style.opacity = '0';
+        pop.style.transform = 'scale(0.55)';
+        pop.style.left = '0px';
+        void pop.offsetWidth;
+        pop.style.transition = transition;
+      });
+
+      // Touch has no persistent hover state to correctly reset from — a tap
+      // fires a simulated pointerenter but often no matching pointerleave
+      // once the finger lifts, leaving the card stuck open. The card is a
+      // decorative enhancement on top of a fully functional link/text, so
+      // it's skipped entirely for touch rather than chasing a reliable
+      // touch-dismiss signal.
+      trigger.addEventListener('pointerenter', (e) => {
+        if (e.pointerType === 'touch') return;
+        pop.style.opacity = '1';
+        pop.style.transform = 'scale(1)';
+      });
+      trigger.addEventListener('pointermove', (e) => {
+        if (e.pointerType === 'touch') return;
+        pop.style.left = `${e.clientX + 14}px`;
+        pop.style.top = `${e.clientY + 14}px`;
+      });
+      trigger.addEventListener('pointerleave', (e) => {
+        if (e.pointerType === 'touch') return;
+        pop.style.opacity = '0';
+        pop.style.transform = 'scale(0.55)';
+      });
+    }
+  }
+
+  bindHoverPreviews();
+</script>

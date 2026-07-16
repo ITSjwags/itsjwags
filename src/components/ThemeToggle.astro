@@ -23,23 +23,79 @@
   // for why) — keep both in sync if it ever changes.
   (function () {
     var button = document.getElementById('theme-toggle');
+    if (!button) return;
+
+    var activeTransition = null;
 
     function sync(theme) {
       var isLight = theme === 'light';
-      if (!button) return;
       button.setAttribute('aria-checked', String(isLight));
       button.setAttribute('aria-label', isLight ? 'Switch to dark theme' : 'Switch to light theme');
     }
 
-    if (button) {
-      button.addEventListener('click', function () {
-        var current = document.documentElement.dataset.theme || 'dark';
-        var next = current === 'dark' ? 'light' : 'dark';
-        document.documentElement.dataset.theme = next;
+    function applyTheme(next) {
+      document.documentElement.dataset.theme = next;
+      try {
         localStorage.setItem('jw-theme', next);
-        sync(next);
-      });
+      } catch (e) {
+        // Ignore — theme still applies to this page load, it just won't
+        // persist. sync() below must still run so aria-checked/aria-label
+        // don't fall out of sync with the theme that already visually changed.
+      }
+      sync(next);
     }
+
+    button.addEventListener('click', function (event) {
+      var current = document.documentElement.dataset.theme || 'dark';
+      var next = current === 'dark' ? 'light' : 'dark';
+
+      var supportsViewTransition = typeof document.startViewTransition === 'function';
+      var reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      if (activeTransition) {
+        // A transition is already animating — ignore rapid re-clicks
+        // rather than stacking/glitching a second one on top of it.
+        return;
+      }
+
+      if (!supportsViewTransition || reducedMotion) {
+        applyTheme(next);
+        return;
+      }
+
+      var x = event.clientX;
+      var y = event.clientY;
+      var radius = Math.hypot(
+        Math.max(x, window.innerWidth - x),
+        Math.max(y, window.innerHeight - y)
+      );
+
+      activeTransition = document.startViewTransition(function () {
+        applyTheme(next);
+      });
+
+      activeTransition.ready
+        .then(function () {
+          document.documentElement.animate(
+            {
+              clipPath: [
+                'circle(0px at ' + x + 'px ' + y + 'px)',
+                'circle(' + radius + 'px at ' + x + 'px ' + y + 'px)',
+              ],
+            },
+            {
+              duration: 500,
+              easing: 'ease-in-out',
+              pseudoElement: '::view-transition-new(root)',
+            }
+          );
+        })
+        .catch(function () {});
+
+      activeTransition.finished.then(function () {
+        activeTransition = null;
+      });
+    });
 
     sync(document.documentElement.dataset.theme || 'dark');
   })();

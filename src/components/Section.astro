@@ -2,23 +2,46 @@
 import SectionLabel from './SectionLabel.astro';
 
 interface Props {
-  index: string;
-  label: string;
+  label?: string;
   padding?: string;
   labelMargin?: string;
   class?: string;
+  animateSection?: boolean;
+  // For callers that render their own SectionLabel manually (e.g.
+  // CurrentlyBuilding's nested eyebrow) instead of passing `label` — lets
+  // them still give the section an accessible name pointing at that label.
+  ariaLabelledby?: string;
 }
 
 const {
-  index,
   label,
-  padding = 'py-10 sm:py-[60px]',
-  labelMargin = 'mb-7',
+  padding = 'pt-13 pb-13 min-[561px]:pt-16 min-[561px]:pb-16 min-[721px]:pt-20 min-[721px]:pb-20',
+  labelMargin = 'mb-4',
   class: className = '',
+  // Sections with a decorative background (e.g. the plus-grid) opt out —
+  // the scroll-reveal fade/slide belongs on the actual content, not on a
+  // static background that happens to share the section's box. Those
+  // callers apply .animate-on-scroll to their own content wrapper instead.
+  animateSection = true,
+  ariaLabelledby,
 } = Astro.props;
+
+// A section without an accessible name isn't exposed as a navigable
+// "region" landmark, even with a visible heading right at its start —
+// giving it one via aria-labelledby fixes that for screen reader users
+// who jump between landmarks.
+const labelId = label
+  ? `section-label-${label
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/(^-|-$)/g, '')}`
+  : undefined;
 ---
 
-<section class={`animate-on-scroll border-t border-border ${padding} ${className}`}>
-  <SectionLabel index={index} label={label} class={labelMargin} />
+<section
+  class={`${animateSection ? 'animate-on-scroll' : ''} ${padding} ${className}`}
+  aria-labelledby={ariaLabelledby ?? labelId}
+>
+  {label && <SectionLabel label={label} id={labelId} class={labelMargin} />}
   <slot />
 </section>

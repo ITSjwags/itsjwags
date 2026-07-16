@@ -21,6 +21,17 @@
   --app-font-mono: 'JetBrains Mono', monospace;
 }
 
+/* Disable the browser's default cross-fade so the theme toggle's
+   circular-wipe animation (driven manually via Web Animations API on
+   ::view-transition-new(root)) is the only motion — without
+   mix-blend-mode:normal, the two snapshots blend and ghost visibly
+   during the wipe. */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
 :root,
 [data-theme="dark"] {
   --bg: #131210;
@@ -39,26 +50,40 @@
   /* Matches --bg: near-black button text reads correctly on the bright
      dark-theme accent gold. */
   --on-accent: var(--bg);
+  --plus: rgba(242, 237, 228, 0.045);
+  --plus-strong: rgba(232, 184, 75, 0.16);
+  --row-tint: rgba(255, 255, 255, 0.055);
 }
 
 [data-theme="light"] {
-  --bg: #faf7f1;
-  --fg: #1c1a15;
-  --fg2: #2a2620;
-  --fg3: #4a453c;
-  --border: #e4ddd0;
-  --accent: #93641a;
-  --muted: #59544c;
-  --muted-2: #767065;
-  /* Matches --bg: the darker light-theme accent needs light text, not
-     dark — #131210 on #93641a is only 3.64:1, fails AA. */
-  --on-accent: var(--bg);
+  --bg: #fcf7f0;
+  --fg: #1c1a13;
+  --fg2: #1c1a13;
+  --fg3: #5a544b;
+  --border: #e6ddd0;
+  --accent: #9b6100;
+  /* Light theme's muted/muted-2 share one value — it independently passes
+     AA (~7:1 against --bg) on its own, unlike dark theme, which needs the
+     two-tier split for contrast. */
+  --muted: #5a544b;
+  --muted-2: #5a544b;
+  /* Declared explicitly rather than reusing --bg — the two aren't the same
+     value in light theme (unlike dark, where they match). */
+  --on-accent: #ffffff;
+  --plus: rgba(28, 26, 19, 0.045);
+  --plus-strong: rgba(155, 97, 0, 0.15);
+  --row-tint: rgba(28, 26, 19, 0.05);
 }
 
 @layer base {
   body {
     @apply font-mono bg-bg text-fg min-h-screen;
     margin: 0;
+    /* Full-bleed decorative backgrounds break out of the narrow content
+       column via `width: 100vw; left: 50%; translateX(-50%)`. On a classic
+       (non-overlay) scrollbar, 100vw is wider than the visible viewport,
+       which would otherwise introduce real horizontal scroll. */
+    overflow-x: hidden;
   }
   h1, h2, h3 {
     @apply font-display;
@@ -127,6 +152,74 @@
   a:hover .arrow-glyph-right {
     transform: translateX(3px);
   }
+  /* Trailing ">" caret, hidden until hover/focus and sliding in — for
+     compact contact-link rows. Distinct from .arrow-glyph, which stays
+     visible and just nudges: this one is absent until interaction. */
+  .link-caret {
+    display: inline-block;
+    opacity: 0;
+    transform: translateX(-5px);
+    transition:
+      opacity 200ms ease,
+      transform 200ms ease;
+  }
+  a:hover .link-caret,
+  a:focus-visible .link-caret {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  /* Trailing ">" on buttons: collapsed via max-width at rest instead of
+     .link-caret's translateX slide — a separate mechanism from plain-text
+     links since the caret sits inside the button's own layout box. */
+  .btn-caret {
+    display: inline-block;
+    max-width: 0;
+    margin-left: 0;
+    overflow: hidden;
+    opacity: 0;
+    transition:
+      max-width 240ms ease,
+      opacity 200ms ease,
+      margin-left 240ms ease;
+  }
+  a:hover .btn-caret,
+  a:focus-visible .btn-caret {
+    max-width: 1.4em;
+    margin-left: 8px;
+    opacity: 1;
+  }
+  /* Cursor-following photo card shown on hover/focus of a HoverPreview
+     trigger. Background stays a fixed white "photo card" regardless of
+     theme — it represents a physical photo, not themed UI chrome. */
+  .hover-preview-card {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 50;
+    padding: 5px;
+    border-radius: 14px;
+    background: #fff;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.22);
+    opacity: 0;
+    transform: scale(0.55);
+    transform-origin: 0 0;
+    pointer-events: none;
+    backface-visibility: hidden;
+    will-change: transform, opacity;
+    transition:
+      opacity 180ms ease,
+      transform 180ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .hover-preview-card img {
+    display: block;
+    /* Explicit width/height (not just the HTML attributes) because
+       Tailwind's preflight resets img to max-width:100%/height:auto,
+       which otherwise shrinks these below their intended display size. */
+    width: var(--hp-w);
+    height: var(--hp-h);
+    border-radius: 10px;
+    object-fit: cover;
+  }
 }
 
 @keyframes cursor-blink {
@@ -139,11 +232,14 @@
   50% { transform: scaleY(1); }
 }
 
-@keyframes golf-putt {
-  0% { right: calc(100% - 20px); transform: scale(1); animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1); }
-  60% { transform: scale(1); animation-timing-function: ease-out; }
-  82% { transform: scale(0); }
-  100% { right: 14px; transform: scale(0); }
+@keyframes drum-hit {
+  0% { transform: scaleY(1.7); }
+  100% { transform: scaleY(1); }
+}
+
+@keyframes flag-wave {
+  0%, 100% { transform: scaleX(1); }
+  50% { transform: scaleX(0.62); }
 }
 
 @keyframes float-up {
@@ -153,8 +249,38 @@
 
 .animate-cursor-blink { animation: cursor-blink 1s step-end infinite; }
 .animate-drum-pulse { animation: drum-pulse 1.1s ease-in-out infinite; transform-origin: bottom; }
-.animate-golf-putt { animation: golf-putt 4.2s infinite; }
 .animate-float-up { animation: float-up 0.7s ease both; }
+
+[data-golf-green] {
+  transition: filter 250ms ease;
+}
+[data-golf]:hover [data-golf-green],
+[data-golf]:focus-visible [data-golf-green] {
+  filter: brightness(1.18);
+}
+[data-golf-flag] {
+  transform-origin: left center;
+}
+[data-golf]:hover [data-golf-flag],
+[data-golf]:focus-visible [data-golf-flag] {
+  animation: flag-wave 1.15s ease-in-out infinite;
+}
+/* Paused while the sink celebration (WAAPI rotate) plays on the same
+   element/property — same specificity as the rule above, placed after it
+   so source order lets this win while .is-celebrating is present. */
+[data-golf]:hover [data-golf-flag].is-celebrating,
+[data-golf]:focus-visible [data-golf-flag].is-celebrating {
+  animation: none;
+}
+[data-bar] {
+  transition: filter 200ms ease, opacity 200ms ease;
+  opacity: 0.85;
+}
+[data-drums]:hover [data-bar],
+[data-drums]:focus-within [data-bar] {
+  opacity: 1;
+  filter: brightness(1.12);
+}
 
 /* Scroll-triggered reveal for below-the-fold sections (Base.astro's
    IntersectionObserver adds .is-visible on first entry into viewport).
@@ -167,13 +293,39 @@
   animation: float-up 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
+/* Every TypewriterText instance starts hidden behind this wrapper —
+   otherwise the full static text (and cursor, if present) flashes
+   visible on first paint, then vanishes when the script clears it to
+   start typing. Text and cursor are wrapped together so they reveal as
+   one unit instead of the cursor blinking alone first. Scroll-triggered
+   instances (SectionLabel) are already hidden by their .animate-on-scroll
+   ancestor, but this still applies for the moment between that ancestor
+   fading in and typing actually starting. */
+.js .jw-type-wrap {
+  opacity: 0;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .animate-cursor-blink { animation: none; opacity: 1; }
   .animate-drum-pulse { animation: none; transform: scaleY(1); }
-  .animate-golf-putt { animation: none; right: 14px; transform: scale(0); }
   .animate-float-up { animation: none; opacity: 1; transform: translateY(0); }
   .animate-on-scroll { animation: none; opacity: 1; }
-  a, button, .link-underline::after, .arrow-glyph, .arrow-glyph-right, [data-theme-thumb] {
+  /* Must match .js .jw-type-wrap's specificity (two classes) — a plain
+     .jw-type-wrap override here loses to that base rule regardless of
+     being inside a matching media query, leaving all typewriter text
+     permanently invisible under reduced motion. */
+  .js .jw-type-wrap { opacity: 1; }
+  [data-golf]:hover [data-golf-flag],
+  [data-golf]:focus-visible [data-golf-flag] {
+    animation: none;
+  }
+  /* .row-bg/.row-text are NOT listed here even though they're the same
+     kind of transition — component-scoped Astro <style> blocks compile
+     every rule with an added data-astro-cid-* attribute selector, which
+     outranks a plain class selector here regardless of source order or
+     media query. Selectors scoped that way need their reduced-motion
+     override colocated in the component's own <style> block instead. */
+  a, button, .link-underline::after, .arrow-glyph, .arrow-glyph-right, .link-caret, .btn-caret, [data-theme-thumb], .hover-preview-card, [data-golf-green], [data-bar] {
     transition: none;
   }
 }

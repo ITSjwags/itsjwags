@@ -2,16 +2,101 @@
 import { projects } from '../data/projects';
 import Button from './Button.astro';
 import Section from './Section.astro';
+import SectionLabel from './SectionLabel.astro';
 
 // Design has one "currently building" spotlight, not a list — no wrapper
 // needed for a single item.
 const [project] = projects;
+const sectionLabelId = 'section-label-currently-building';
 ---
 
-<Section index="02" label="CURRENTLY BUILDING" labelMargin="mb-7 sm:mb-9">
-  <div class="mb-3.5 text-label font-medium text-muted">{project.eyebrow}</div>
-  <h3 class="mb-5 text-[clamp(2rem,8vw,3.25rem)] leading-[1.02] font-semibold">{project.name}</h3>
-  <p class="mb-6 max-w-[640px] text-[16px] leading-[1.6] text-fg-3 sm:text-[17px] sm:leading-[1.7]">{project.description}</p>
-  <p class="mb-7 text-label font-medium text-muted-2">{project.stack}</p>
-  <Button href={project.href}>See the project <span class="arrow-glyph">↗</span></Button>
+<Section class="relative" animateSection={false} ariaLabelledby={sectionLabelId}>
+  <div class="plus-grid-inner" aria-hidden="true">
+    <div class="plus-grid-base"></div>
+    <div class="plus-grid-spotlight"></div>
+  </div>
+  <div class="animate-on-scroll relative z-10 flex flex-row items-start gap-10 max-[720px]:flex-col max-[720px]:gap-8">
+    <div class="h-[278px] w-[278px] shrink-0 rounded-[26px] bg-white p-1 shadow-[0_2px_6px_rgba(0,0,0,0.10),0_10px_24px_rgba(0,0,0,0.10)] max-[720px]:w-full max-[720px]:max-w-[360px]">
+      <div class="h-full w-full overflow-hidden rounded-[22px] bg-white">
+        <img
+          src="/photos/recur-screenshot.png"
+          alt="Recur app"
+          width="270"
+          height="270"
+          class="block h-full w-full rounded-[22px] object-cover"
+        />
+      </div>
+    </div>
+    <div class="flex flex-1 flex-col items-start gap-8">
+      <div class="flex flex-col gap-4">
+        <div class="flex flex-col gap-1">
+          <SectionLabel label="currently building // solo project" id={sectionLabelId} />
+          <h3 class="m-0 font-display text-[30px] leading-none font-medium min-[561px]:text-[40px]">{project.name}</h3>
+        </div>
+        <p class="m-0 font-display text-[18px] leading-[28px] font-light text-fg-3 min-[561px]:text-[20px] min-[561px]:leading-[32px]">
+          {project.description}
+        </p>
+      </div>
+      <span class="text-[14px] font-medium text-muted">{project.stack}</span>
+      <Button href={project.href}>See the project<span class="btn-caret" aria-hidden="true">&gt;</span></Button>
+    </div>
+  </div>
 </Section>
+
+<style>
+  .plus-grid-inner {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    width: 100vw;
+    transform: translateX(-50%);
+    overflow: hidden;
+    pointer-events: none;
+  }
+  .plus-grid-base,
+  .plus-grid-spotlight {
+    position: absolute;
+    inset: 0;
+    -webkit-mask-repeat: repeat;
+    mask-repeat: repeat;
+    -webkit-mask-size: 16px 16px;
+    mask-size: 16px 16px;
+    -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16'%3E%3Cpath d='M8 5V11M5 8H11' stroke='black' stroke-width='1.1'/%3E%3C/svg%3E");
+    mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16'%3E%3Cpath d='M8 5V11M5 8H11' stroke='black' stroke-width='1.1'/%3E%3C/svg%3E");
+  }
+  .plus-grid-base {
+    background-color: var(--plus);
+  }
+  .plus-grid-spotlight {
+    background-color: var(--plus-strong);
+    -webkit-mask-image:
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16'%3E%3Cpath d='M8 5V11M5 8H11' stroke='black' stroke-width='1.1'/%3E%3C/svg%3E"),
+      radial-gradient(circle 260px at var(--mx, -1000px) var(--my, -1000px), #000 0%, rgba(0, 0, 0, 0.5) 40%, transparent 90%);
+    mask-image:
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16'%3E%3Cpath d='M8 5V11M5 8H11' stroke='black' stroke-width='1.1'/%3E%3C/svg%3E"),
+      radial-gradient(circle 260px at var(--mx, -1000px) var(--my, -1000px), #000 0%, rgba(0, 0, 0, 0.5) 40%, transparent 90%);
+    -webkit-mask-size: 16px 16px, 100% 100%;
+    mask-size: 16px 16px, 100% 100%;
+    -webkit-mask-repeat: repeat, no-repeat;
+    mask-repeat: repeat, no-repeat;
+    -webkit-mask-composite: source-in;
+    mask-composite: intersect;
+  }
+</style>
+
+<script>
+  const inner = document.querySelector<HTMLElement>('.plus-grid-inner');
+
+  if (inner) {
+    window.addEventListener(
+      'pointermove',
+      (e) => {
+        const r = inner.getBoundingClientRect();
+        inner.style.setProperty('--mx', `${e.clientX - r.left}px`);
+        inner.style.setProperty('--my', `${e.clientY - r.top}px`);
+      },
+      { passive: true },
+    );
+  }
+</script>

@@ -1,12 +1,24 @@
 ---
 import ThemeToggle from './ThemeToggle.astro';
+import TypewriterText from './TypewriterText.astro';
 ---
 
-<header class="flex items-center justify-between py-7 text-label font-medium tracking-[0.04em] text-muted">
-  <span>JW / ROYAL OAK, MI</span>
-  <div class="flex items-center gap-3.5">
-    <span class="label-dark">DARK</span>
-    <span class="label-light">LIGHT</span>
+<header class="flex items-center justify-between pt-8 text-[14px] font-medium text-muted">
+  <span class="text-[16px] text-fg"><TypewriterText text="jw" id="header" /></span>
+  <div class="flex items-center gap-2">
+    <span class="label-dark">dark</span>
+    <span class="label-light">light</span>
     <ThemeToggle />
   </div>
 </header>
+
+<script>
+  import { typewriter } from '../lib/typewriter';
+
+  const el = document.querySelector<HTMLElement>('[data-jw-id="header"]');
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  if (el && !prefersReducedMotion) {
+    typewriter(el);
+  }
+</script>

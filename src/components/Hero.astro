@@ -1,26 +1,89 @@
 ---
+import HoverPreview from './HoverPreview.astro';
+import TypewriterText from './TypewriterText.astro';
 ---
 
-<header class="animate-float-up pt-10 pb-12 sm:pt-16 sm:pb-[88px]">
-  <p class="m-0 mb-5 text-[15px] font-semibold text-accent">
-    <span>&gt; frontend engineer</span><span class="animate-cursor-blink">_</span>
-  </p>
-  <h1 class="m-0 max-w-[920px] text-[clamp(2.75rem,11vw,5.5rem)] leading-[0.98] font-semibold tracking-[-0.02em]">
-    Jonathan<br />
-    <span class="text-muted">Wagoner.</span>
-  </h1>
-  <p class="mt-6 max-w-[600px] text-[19px] leading-[1.6] text-fg-3 sm:mt-9 sm:text-[22px] sm:leading-[1.7]">
-    I like building products that feel simple, even when the problems behind them aren't.
-  </p>
-  <div class="mt-8 flex flex-wrap gap-x-6 gap-y-2 text-[15px] font-medium">
-    <a href="mailto:jvwagoner@gmail.com" class="link-underline hover:text-accent">jvwagoner@gmail.com</a>
+<header class="animate-float-up flex flex-col gap-8 pt-13 pb-13 min-[561px]:pt-16 min-[561px]:pb-16 min-[721px]:pt-28 min-[721px]:pb-28">
+  <div class="flex flex-col gap-6">
+    <div class="h-[90px] w-[90px] rounded-[18px] bg-white p-1 shadow-[0_2px_6px_rgba(0,0,0,0.10),0_10px_24px_rgba(0,0,0,0.10)]">
+      <img
+        src="/photos/headshot.jpg"
+        alt="Jonathan Wagoner"
+        width="82"
+        height="82"
+        class="block h-full w-full rounded-[14px] object-cover"
+      />
+    </div>
+    <div class="flex flex-col gap-2.5">
+      <p class="m-0 text-[14px] font-medium text-accent">
+        <TypewriterText text="frontend engineer" id="hero-eyebrow" cursor />
+      </p>
+      <h1 class="m-0 font-display text-[34px] leading-none font-medium min-[561px]:text-[54px]">
+        Jonathan Wagoner
+      </h1>
+    </div>
+  </div>
+  <div class="flex flex-col gap-4 font-display text-[18px] leading-[28px] font-light text-fg-3 sm:gap-5 min-[561px]:text-[20px] min-[561px]:leading-[32px]">
+    <p class="m-0">
+      Hey, I'm Jon. I'm a frontend engineer currently building at{' '}
+      <HoverPreview
+        id="zenbusiness"
+        previewSrc="/photos/zenbusiness-hover.jpg"
+        previewAlt="ZenBusiness office space"
+        width={340}
+        height={210}
+      >
+        <a
+          href="https://www.zenbusiness.com/"
+          target="_blank"
+          rel="noopener"
+          class="whitespace-nowrap text-fg underline decoration-fg-3 underline-offset-[3px] hover:text-accent hover:decoration-accent"
+        >
+          ZenBusiness
+          <img
+            src="/logos/zenbusiness.png"
+            alt=""
+            width="26"
+            height="26"
+            class="inline-block h-[26px] w-[26px] rounded-md object-cover align-[-6px] ml-1"
+          />
+          <span class="sr-only"> (opens in new tab)</span>
+        </a>
+      </HoverPreview>{' '}
+      and based in Royal Oak, MI. I've spent my career helping teams turn ideas into products,
+      mostly at early-stage companies, owning the frontend, partnering closely with design, and
+      sweating the details that make software feel <em class="text-accent">polished</em>.
+    </p>
+    <p class="m-0">
+      I'm always happy to work across the stack when it moves things forward. Lately it's React,
+      TypeScript, GraphQL, TanStack, and leaning on AI to build faster, though I care less about
+      the newest framework than software people actually enjoy using.
+    </p>
+  </div>
+  <div class="flex flex-wrap gap-x-8 gap-y-2 text-[14px] font-medium">
+    <a href="mailto:jvwagoner@gmail.com" class="link-underline hover:text-accent">
+      jvwagoner@gmail.com<span class="link-caret" aria-hidden="true">&nbsp;&gt;</span>
+    </a>
     <a
       href="https://linkedin.com/in/jonathanwagoner"
       target="_blank"
       rel="noopener"
-      class="hover:text-accent"
+      class="link-underline hover:text-accent"
     >
-      linkedin <span class="arrow-glyph">↗</span><span class="sr-only"> (opens in new tab)</span>
+      linkedin<span class="link-caret" aria-hidden="true">&nbsp;&gt;</span><span class="sr-only"> (opens in new tab)</span>
     </a>
   </div>
 </header>
+
+<script>
+  import { typewriter } from '../lib/typewriter';
+
+  const el = document.querySelector<HTMLElement>('[data-jw-id="hero-eyebrow"]');
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  if (el && !prefersReducedMotion) {
+    // Starts shortly after the header's "> jw" begins, so the two read as
+    // one staggered sequence.
+    setTimeout(() => typewriter(el), 200);
+  }
+</script>

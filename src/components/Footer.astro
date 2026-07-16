@@ -2,9 +2,16 @@
 import { RESUME_PATH } from '../lib/constants';
 ---
 
-<footer class="flex flex-wrap items-center justify-between gap-3 border-t border-border pt-8 pb-12 text-label text-muted-2">
-  <span>© 2026 JONATHAN WAGONER</span>
-  <a href={RESUME_PATH} download class="text-accent no-underline hover:opacity-80">
-    DOWNLOAD RESUME <span class="arrow-glyph-right">→</span>
-  </a>
+<footer class="flex flex-col gap-10 border-t border-border pt-10 pb-10">
+  <div class="flex flex-row items-start justify-between text-[14px] font-medium">
+    <span class="text-muted">© 2026 jonathan wagoner</span>
+    <a
+      href={RESUME_PATH}
+      target="_blank"
+      rel="noopener"
+      class="link-underline text-accent"
+    >
+      download resume<span class="link-caret" aria-hidden="true">&nbsp;&gt;</span><span class="sr-only"> (opens in new tab)</span>
+    </a>
+  </div>
 </footer>
