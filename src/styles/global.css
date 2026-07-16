@@ -79,6 +79,11 @@
   body {
     @apply font-mono bg-bg text-fg min-h-screen;
     margin: 0;
+    /* Full-bleed decorative backgrounds break out of the narrow content
+       column via `width: 100vw; left: 50%; translateX(-50%)`. On a classic
+       (non-overlay) scrollbar, 100vw is wider than the visible viewport,
+       which would otherwise introduce real horizontal scroll. */
+    overflow-x: hidden;
   }
   h1, h2, h3 {
     @apply font-display;
@@ -314,7 +319,13 @@
   [data-golf]:focus-visible [data-golf-flag] {
     animation: none;
   }
-  a, button, .link-underline::after, .arrow-glyph, .arrow-glyph-right, .link-caret, .btn-caret, [data-theme-thumb], .hover-preview-card, .row-bg, .row-text, [data-golf-green], [data-bar] {
+  /* .row-bg/.row-text are NOT listed here even though they're the same
+     kind of transition — component-scoped Astro <style> blocks compile
+     every rule with an added data-astro-cid-* attribute selector, which
+     outranks a plain class selector here regardless of source order or
+     media query. Selectors scoped that way need their reduced-motion
+     override colocated in the component's own <style> block instead. */
+  a, button, .link-underline::after, .arrow-glyph, .arrow-glyph-right, .link-caret, .btn-caret, [data-theme-thumb], .hover-preview-card, [data-golf-green], [data-bar] {
     transition: none;
   }
 }

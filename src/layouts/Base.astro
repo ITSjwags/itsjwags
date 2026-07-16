@@ -53,7 +53,14 @@ const personSchema = {
       // 'jw-theme' key is duplicated in ThemeToggle.astro (see src/lib/constants.ts
       // for why) — keep both in sync if it ever changes.
       (function () {
-        var stored = localStorage.getItem('jw-theme');
+        var stored;
+        try {
+          stored = localStorage.getItem('jw-theme');
+        } catch (e) {
+          // Storage-blocked context — fall through to the OS-preference
+          // default below instead of aborting the whole script, which
+          // would also skip adding the .js class further down.
+        }
         // Only a first-time visitor (no stored choice yet) gets the OS
         // preference — once someone actively toggles, that explicit choice
         // always wins on later visits, even if it differs from the system.

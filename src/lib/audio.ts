@@ -38,7 +38,10 @@ function ensureAudioContext(): AudioContext | null {
       audioContext = new AudioContextClass();
     }
     if (audioContext.state === 'suspended') {
-      audioContext.resume();
+      // resume() is async and can reject (e.g. the context closes again
+      // between the state check above and this call actually running) —
+      // unhandled, that's an uncaught promise rejection in the console.
+      audioContext.resume().catch(() => {});
     }
     return audioContext;
   } catch {

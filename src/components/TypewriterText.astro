@@ -11,4 +11,4 @@ interface Props {
 const { text, cursor = false, id } = Astro.props;
 ---
 
-&gt; <span class="jw-type-wrap"><span data-jw-type data-jw-id={id}>{text}</span>{cursor && <span class="animate-cursor-blink">_</span>}</span>
+<span aria-hidden="true">&gt;</span> <span class="jw-type-wrap"><span data-jw-type data-jw-id={id}>{text}</span>{cursor && <span class="animate-cursor-blink">_</span>}</span>

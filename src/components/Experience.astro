@@ -34,7 +34,7 @@ import Section from './Section.astro';
             </span>
             <span class="row-text relative z-10 inline-flex items-center justify-end text-right text-[14px] font-medium text-muted group-hover:text-accent max-[720px]:w-full max-[720px]:justify-start max-[720px]:text-left">
               {company.role}
-              <span class="btn-caret">&nbsp;&gt;</span>
+              <span class="btn-caret" aria-hidden="true">&nbsp;&gt;</span>
               <span class="sr-only"> (opens in new tab)</span>
             </span>
           </a>
@@ -65,5 +65,11 @@ import Section from './Section.astro';
   }
   .row-text {
     transition: color 220ms ease;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .row-bg,
+    .row-text {
+      transition: none;
+    }
   }
 </style>
