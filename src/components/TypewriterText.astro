@@ -3,8 +3,8 @@ interface Props {
   text: string;
   cursor?: boolean;
   // Set on instances a page-load script targets directly (TopBar, Hero).
-  // Scroll-triggered instances (SectionLabel) omit it — Base.astro's
-  // IntersectionObserver finds them generically via [data-jw-type].
+  // Scroll-triggered instances (SectionLabel) omit it — those are found
+  // generically via the [data-jw-type] selector instead of by id.
   id?: string;
 }
 

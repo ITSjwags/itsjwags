@@ -62,13 +62,13 @@
   --fg3: #5a544b;
   --border: #e6ddd0;
   --accent: #9b6100;
-  /* Unlike dark theme, the reference's light-theme muted/muted-2 share one
-     value — it independently passes AA (~7:1 against --bg) on its own, so
-     the two-tier split dark theme needs isn't necessary here. */
+  /* Light theme's muted/muted-2 share one value — it independently passes
+     AA (~7:1 against --bg) on its own, unlike dark theme, which needs the
+     two-tier split for contrast. */
   --muted: #5a544b;
   --muted-2: #5a544b;
-  /* Reference declares this explicitly rather than reusing --bg — the two
-     aren't the same value in light theme (unlike dark, where they match). */
+  /* Declared explicitly rather than reusing --bg — the two aren't the same
+     value in light theme (unlike dark, where they match). */
   --on-accent: #ffffff;
   --plus: rgba(28, 26, 19, 0.045);
   --plus-strong: rgba(155, 97, 0, 0.15);
@@ -164,8 +164,8 @@
     transform: translateX(0);
   }
   /* Trailing ">" on buttons: collapsed via max-width at rest instead of
-     .link-caret's translateX slide, matching the reference's separate
-     button-specific caret mechanism. */
+     .link-caret's translateX slide — a separate mechanism from plain-text
+     links since the caret sits inside the button's own layout box. */
   .btn-caret {
     display: inline-block;
     max-width: 0;
@@ -260,6 +260,13 @@
 [data-golf]:focus-visible [data-golf-flag] {
   animation: flag-wave 1.15s ease-in-out infinite;
 }
+/* Paused while the sink celebration (WAAPI rotate) plays on the same
+   element/property — same specificity as the rule above, placed after it
+   so source order lets this win while .is-celebrating is present. */
+[data-golf]:hover [data-golf-flag].is-celebrating,
+[data-golf]:focus-visible [data-golf-flag].is-celebrating {
+  animation: none;
+}
 [data-bar] {
   transition: filter 200ms ease, opacity 200ms ease;
   opacity: 0.85;
@@ -298,7 +305,11 @@
   .animate-drum-pulse { animation: none; transform: scaleY(1); }
   .animate-float-up { animation: none; opacity: 1; transform: translateY(0); }
   .animate-on-scroll { animation: none; opacity: 1; }
-  .jw-type-wrap { opacity: 1; }
+  /* Must match .js .jw-type-wrap's specificity (two classes) — a plain
+     .jw-type-wrap override here loses to that base rule regardless of
+     being inside a matching media query, leaving all typewriter text
+     permanently invisible under reduced motion. */
+  .js .jw-type-wrap { opacity: 1; }
   [data-golf]:hover [data-golf-flag],
   [data-golf]:focus-visible [data-golf-flag] {
     animation: none;

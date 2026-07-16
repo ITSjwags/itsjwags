@@ -7,9 +7,10 @@ import SectionLabel from './SectionLabel.astro';
 // Design has one "currently building" spotlight, not a list — no wrapper
 // needed for a single item.
 const [project] = projects;
+const sectionLabelId = 'section-label-currently-building';
 ---
 
-<Section class="relative" animateSection={false} ariaLabelledby="section-label-currently-building">
+<Section class="relative" animateSection={false} ariaLabelledby={sectionLabelId}>
   <div class="plus-grid-inner" aria-hidden="true">
     <div class="plus-grid-base"></div>
     <div class="plus-grid-spotlight"></div>
@@ -29,7 +30,7 @@ const [project] = projects;
     <div class="flex flex-1 flex-col items-start gap-8">
       <div class="flex flex-col gap-4">
         <div class="flex flex-col gap-1">
-          <SectionLabel label="currently building // solo project" id="section-label-currently-building" />
+          <SectionLabel label="currently building // solo project" id={sectionLabelId} />
           <h3 class="m-0 font-display text-[30px] leading-none font-medium min-[561px]:text-[40px]">{project.name}</h3>
         </div>
         <p class="m-0 font-display text-[18px] leading-[28px] font-light text-fg-3 min-[561px]:text-[20px] min-[561px]:leading-[32px]">

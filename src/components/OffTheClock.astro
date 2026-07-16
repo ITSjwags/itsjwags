@@ -11,13 +11,14 @@ const bars = DRUM_HEIGHTS_PX.map((h, i) => ({
   heightPct: `${Math.round((h / 36) * 100)}%`,
   delay: `${DRUM_DELAYS_S[i % DRUM_DELAYS_S.length]}s`,
 }));
+const sectionLabelId = 'section-label-off-the-clock';
 ---
 
-<Section class="border-t border-border" ariaLabelledby="section-label-off-the-clock">
+<Section class="border-t border-border" ariaLabelledby={sectionLabelId}>
   <div class="flex flex-col gap-10">
     <div class="flex flex-col gap-4">
       <div class="flex items-center justify-between">
-        <SectionLabel label="off the clock" id="section-label-off-the-clock" class="mb-0" />
+        <SectionLabel label="off the clock" id={sectionLabelId} class="mb-0" />
         <button
           id="mute-toggle"
           type="button"
@@ -68,6 +69,7 @@ const bars = DRUM_HEIGHTS_PX.map((h, i) => ({
           role="group"
           aria-label="Drum pads"
           class="flex h-9 touch-none items-end gap-1"
+          title="Click or drag across the bars to play"
         >
           {
             bars.map((bar, i) => (
@@ -139,7 +141,13 @@ const bars = DRUM_HEIGHTS_PX.map((h, i) => ({
         ball.style.opacity = '0';
         playGolfDrop();
         if (flag && !prefersReducedMotion) {
-          flag.animate(
+          // The hover-driven CSS flag-wave animation also drives `transform`
+          // on this element and stays active while the button is hovered/
+          // focused (the normal case while clicking) — without pausing it,
+          // the two animations fight over the same property and the flag
+          // visibly snaps once this one ends.
+          flag.classList.add('is-celebrating');
+          const wiggle = flag.animate(
             [
               { transform: 'rotate(0deg)' },
               { transform: 'rotate(-16deg)' },
@@ -148,6 +156,9 @@ const bars = DRUM_HEIGHTS_PX.map((h, i) => ({
             ],
             { duration: 460, easing: 'ease-out' },
           );
+          wiggle.finished
+            .catch(() => {})
+            .finally(() => flag.classList.remove('is-celebrating'));
         }
         makes += 1;
         if (golfCount) golfCount.textContent = ` · ${makes} sunk`;
@@ -204,6 +215,12 @@ const bars = DRUM_HEIGHTS_PX.map((h, i) => ({
     });
 
     window.addEventListener('pointerup', () => {
+      pointerDown = false;
+    });
+    // A drag can end without ever reaching pointerup (e.g. iOS edge-swipe-
+    // back hijacking an in-progress touch) — without this, pointerDown
+    // sticks true and later hovers with no click fire phantom hits.
+    window.addEventListener('pointercancel', () => {
       pointerDown = false;
     });
   }

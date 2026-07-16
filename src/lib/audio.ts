@@ -26,7 +26,11 @@ export function setMuted(next: boolean): void {
 
 function ensureAudioContext(): AudioContext | null {
   try {
-    if (!audioContext) {
+    // Mobile browsers can close an AudioContext outside script control
+    // (e.g. Safari on backgrounding/screen-lock) — treat 'closed' the same
+    // as having no context yet, or every future call would keep handing
+    // back a dead context and throw on every oscillator creation.
+    if (!audioContext || audioContext.state === 'closed') {
       const AudioContextClass =
         window.AudioContext ||
         (window as unknown as { webkitAudioContext: typeof AudioContext })
@@ -42,55 +46,81 @@ function ensureAudioContext(): AudioContext | null {
   }
 }
 
-export function playDrumHit(freq: number): void {
+interface ToneOptions {
+  type: OscillatorType;
+  freq: number;
+  rampToFreq?: number;
+  rampDuration?: number;
+  gainPeak: number;
+  duration: number;
+  stopAt: number;
+}
+
+function playTone({
+  type,
+  freq,
+  rampToFreq,
+  rampDuration,
+  gainPeak,
+  duration,
+  stopAt,
+}: ToneOptions): void {
   if (muted) return;
   const ctx = ensureAudioContext();
   if (!ctx) return;
-  const osc = ctx.createOscillator();
-  const gain = ctx.createGain();
-  const t = ctx.currentTime;
-  osc.type = 'sine';
-  osc.frequency.setValueAtTime(freq, t);
-  osc.frequency.exponentialRampToValueAtTime(freq * 0.5, t + 0.18);
-  gain.gain.setValueAtTime(0.22, t);
-  gain.gain.exponentialRampToValueAtTime(0.0001, t + 0.22);
-  osc.connect(gain);
-  gain.connect(ctx.destination);
-  osc.start(t);
-  osc.stop(t + 0.24);
+  // Node-graph creation/start can still throw even with a live context
+  // (e.g. a stale reference slipping past the closed-state check above) —
+  // swallow it so this function never throws, matching
+  // ensureAudioContext's own degrade-to-silent contract.
+  try {
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    const t = ctx.currentTime;
+    osc.type = type;
+    if (rampToFreq !== undefined) {
+      osc.frequency.setValueAtTime(freq, t);
+      osc.frequency.exponentialRampToValueAtTime(
+        rampToFreq,
+        t + (rampDuration ?? duration)
+      );
+    } else {
+      osc.frequency.value = freq;
+    }
+    gain.gain.setValueAtTime(gainPeak, t);
+    gain.gain.exponentialRampToValueAtTime(0.0001, t + duration);
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.start(t);
+    osc.stop(t + stopAt);
+  } catch {
+    // Silent — see comment above.
+  }
+}
+
+export function playDrumHit(freq: number): void {
+  playTone({
+    type: 'sine',
+    freq,
+    rampToFreq: freq * 0.5,
+    rampDuration: 0.18,
+    gainPeak: 0.22,
+    duration: 0.22,
+    stopAt: 0.24,
+  });
 }
 
 export function playGolfTick(): void {
-  if (muted) return;
-  const ctx = ensureAudioContext();
-  if (!ctx) return;
-  const osc = ctx.createOscillator();
-  const gain = ctx.createGain();
-  const t = ctx.currentTime;
-  osc.type = 'triangle';
-  osc.frequency.value = 540;
-  gain.gain.setValueAtTime(0.1, t);
-  gain.gain.exponentialRampToValueAtTime(0.0001, t + 0.08);
-  osc.connect(gain);
-  gain.connect(ctx.destination);
-  osc.start(t);
-  osc.stop(t + 0.09);
+  playTone({ type: 'triangle', freq: 540, gainPeak: 0.1, duration: 0.08, stopAt: 0.09 });
 }
 
 export function playGolfDrop(): void {
-  if (muted) return;
-  const ctx = ensureAudioContext();
-  if (!ctx) return;
-  const osc = ctx.createOscillator();
-  const gain = ctx.createGain();
-  const t = ctx.currentTime;
-  osc.type = 'sine';
-  osc.frequency.setValueAtTime(300, t);
-  osc.frequency.exponentialRampToValueAtTime(120, t + 0.18);
-  gain.gain.setValueAtTime(0.2, t);
-  gain.gain.exponentialRampToValueAtTime(0.0001, t + 0.22);
-  osc.connect(gain);
-  gain.connect(ctx.destination);
-  osc.start(t);
-  osc.stop(t + 0.24);
+  playTone({
+    type: 'sine',
+    freq: 300,
+    rampToFreq: 120,
+    rampDuration: 0.18,
+    gainPeak: 0.2,
+    duration: 0.22,
+    stopAt: 0.24,
+  });
 }

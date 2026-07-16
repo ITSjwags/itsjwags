@@ -35,7 +35,13 @@
 
     function applyTheme(next) {
       document.documentElement.dataset.theme = next;
-      localStorage.setItem('jw-theme', next);
+      try {
+        localStorage.setItem('jw-theme', next);
+      } catch (e) {
+        // Ignore — theme still applies to this page load, it just won't
+        // persist. sync() below must still run so aria-checked/aria-label
+        // don't fall out of sync with the theme that already visually changed.
+      }
       sync(next);
     }
 
