@@ -1,4 +1,6 @@
 ---
+import drumsHover from '../assets/photos/drums-hover.jpg';
+import golfHover from '../assets/photos/golf-hover.jpg';
 import HoverPreview from './HoverPreview.astro';
 import Section from './Section.astro';
 import SectionLabel from './SectionLabel.astro';
@@ -30,11 +32,11 @@ const sectionLabelId = 'section-label-off-the-clock';
       </div>
       <p class="m-0 font-display text-[18px] leading-[28px] font-light text-fg-3 min-[561px]:text-[20px] min-[561px]:leading-[32px]">
         In my spare time, I enjoy{' '}
-        <HoverPreview id="golf" previewSrc="/photos/golf-hover.jpg" previewAlt="Golfing" width={240} height={240}>
+        <HoverPreview id="golf" previewSrc={golfHover} previewAlt="Golfing" width={240} height={240}>
           <span class="cursor-pointer text-fg">golfing</span>
         </HoverPreview>{' '}
         as often as I can and playing the{' '}
-        <HoverPreview id="drums" previewSrc="/photos/drums-hover.jpg" previewAlt="Playing drums" width={240} height={240}>
+        <HoverPreview id="drums" previewSrc={drumsHover} previewAlt="Playing drums" width={240} height={240}>
           <span class="cursor-pointer text-fg">drums</span>
         </HoverPreview>{' '}
         loudly on the weekends.
@@ -77,7 +79,7 @@ const sectionLabelId = 'section-label-off-the-clock';
                 type="button"
                 data-bar
                 aria-label={`Hit drum ${i + 1}`}
-                class="animate-drum-pulse origin-bottom flex-1 cursor-pointer appearance-none rounded-[1px] border-0 bg-accent p-0"
+                class="animate-drum-pulse origin-bottom relative flex-1 cursor-pointer appearance-none rounded-[1px] border-0 bg-accent p-0 before:absolute before:-inset-x-0.5 before:-inset-y-2 before:content-['']"
                 style={{ height: bar.heightPct, animationDelay: bar.delay }}
               />
             ))

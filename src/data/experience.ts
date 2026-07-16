@@ -3,6 +3,7 @@ export interface Company {
   role: string;
   url: string;
   logo: string;
+  current?: boolean;
 }
 
 export const companies: Company[] = [
@@ -11,6 +12,7 @@ export const companies: Company[] = [
     role: 'staff software engineer',
     url: 'https://www.zenbusiness.com',
     logo: '/logos/zenbusiness.png',
+    current: true,
   },
   {
     name: 'Baton',

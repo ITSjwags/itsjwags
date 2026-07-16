@@ -1,4 +1,7 @@
 ---
+import { Image } from 'astro:assets';
+import headshot from '../assets/photos/headshot.jpg';
+import zenbusinessHover from '../assets/photos/zenbusiness-hover.jpg';
 import HoverPreview from './HoverPreview.astro';
 import TypewriterText from './TypewriterText.astro';
 ---
@@ -6,17 +9,20 @@ import TypewriterText from './TypewriterText.astro';
 <header class="animate-float-up flex flex-col gap-8 pt-13 pb-13 min-[561px]:pt-16 min-[561px]:pb-16 min-[721px]:pt-28 min-[721px]:pb-28">
   <div class="flex flex-col gap-6">
     <div class="h-[90px] w-[90px] rounded-[18px] bg-white p-1 shadow-[0_2px_6px_rgba(0,0,0,0.10),0_10px_24px_rgba(0,0,0,0.10)]">
-      <img
-        src="/photos/headshot.jpg"
+      <Image
+        src={headshot}
         alt="Jonathan Wagoner"
-        width="82"
-        height="82"
+        width={82}
+        height={82}
+        densities={[1, 2]}
+        loading="eager"
+        fetchpriority="high"
         class="block h-full w-full rounded-[14px] object-cover"
       />
     </div>
     <div class="flex flex-col gap-2.5">
       <p class="m-0 text-[14px] font-medium text-accent">
-        <TypewriterText text="frontend engineer" id="hero-eyebrow" cursor />
+        <TypewriterText text="software engineer, frontend" id="hero-eyebrow" cursor />
       </p>
       <h1 class="m-0 font-display text-[34px] leading-none font-medium min-[561px]:text-[54px]">
         Jonathan Wagoner
@@ -25,11 +31,11 @@ import TypewriterText from './TypewriterText.astro';
   </div>
   <div class="flex flex-col gap-4 font-display text-[18px] leading-[28px] font-light text-fg-3 sm:gap-5 min-[561px]:text-[20px] min-[561px]:leading-[32px]">
     <p class="m-0">
-      Hey, I'm Jon. I'm a frontend engineer currently building at{' '}
+      I'm currently a staff software engineer building at{' '}
       <HoverPreview
         id="zenbusiness"
-        previewSrc="/photos/zenbusiness-hover.jpg"
-        previewAlt="ZenBusiness office space"
+        previewSrc={zenbusinessHover}
+        previewAlt="ZenBusiness website"
         width={340}
         height={210}
       >
@@ -53,11 +59,6 @@ import TypewriterText from './TypewriterText.astro';
       and based in Royal Oak, MI. I've spent my career helping teams turn ideas into products,
       mostly at early-stage companies, owning the frontend, partnering closely with design, and
       sweating the details that make software feel <em class="text-accent">polished</em>.
-    </p>
-    <p class="m-0">
-      I'm always happy to work across the stack when it moves things forward. Lately it's React,
-      TypeScript, GraphQL, TanStack, and leaning on AI to build faster, though I care less about
-      the newest framework than software people actually enjoy using.
     </p>
   </div>
   <div class="flex flex-wrap gap-x-8 gap-y-2 text-[14px] font-medium">

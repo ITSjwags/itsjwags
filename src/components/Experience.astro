@@ -5,13 +5,16 @@ import Section from './Section.astro';
 ---
 
 <Section label="been at this a while">
-  <p class="m-0 mb-10 font-display text-[18px] leading-[28px] font-light text-fg-3 min-[561px]:text-[20px] min-[561px]:leading-[32px]">
-    Throughout my career, I've worked on various projects, from building scalable systems to
-    designing user-friendly interfaces. Full history's in the{' '}
-    <a href={RESUME_PATH} target="_blank" rel="noopener" class="link-underline text-accent">
-      resume<span class="sr-only"> (opens in new tab)</span>
-    </a>.
-  </p>
+  <div class="mb-10 flex flex-col gap-4">
+    <span class="text-[14px] font-medium text-muted">react // typescript // graphql // tanstack // claude code</span>
+    <p class="m-0 font-display text-[18px] leading-[28px] font-light text-fg-3 min-[561px]:text-[20px] min-[561px]:leading-[32px]">
+      Most of my career has been focused on the frontend, but I'm just as happy working
+      across the stack when it moves things forward. Full history's in the{' '}
+      <a href={RESUME_PATH} target="_blank" rel="noopener" class="link-underline text-accent">
+        resume<span class="sr-only"> (opens in new tab)</span>
+      </a>.
+    </p>
+  </div>
   <ul class="m-0 flex list-none flex-col p-0">
     {
       companies.map((company) => (
@@ -34,6 +37,7 @@ import Section from './Section.astro';
             </span>
             <span class="row-text relative z-10 inline-flex items-center justify-end text-right text-[14px] font-medium text-muted group-hover:text-accent max-[720px]:w-full max-[720px]:justify-start max-[720px]:text-left">
               {company.role}
+              {company.current && <span class="opacity-70">&nbsp;· current</span>}
               <span class="btn-caret" aria-hidden="true">&nbsp;&gt;</span>
               <span class="sr-only"> (opens in new tab)</span>
             </span>

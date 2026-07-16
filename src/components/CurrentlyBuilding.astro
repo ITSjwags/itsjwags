@@ -1,4 +1,6 @@
 ---
+import { Image } from 'astro:assets';
+import recurScreenshot from '../assets/photos/recur-screenshot.png';
 import { projects } from '../data/projects';
 import Button from './Button.astro';
 import Section from './Section.astro';
@@ -16,13 +18,15 @@ const sectionLabelId = 'section-label-currently-building';
     <div class="plus-grid-spotlight"></div>
   </div>
   <div class="animate-on-scroll relative z-10 flex flex-row items-start gap-10 max-[720px]:flex-col max-[720px]:gap-8">
-    <div class="h-[278px] w-[278px] shrink-0 rounded-[26px] bg-white p-1 shadow-[0_2px_6px_rgba(0,0,0,0.10),0_10px_24px_rgba(0,0,0,0.10)] max-[720px]:w-full max-[720px]:max-w-[360px]">
+    <div class="aspect-square w-[278px] shrink-0 rounded-[26px] bg-white p-1 shadow-[0_2px_6px_rgba(0,0,0,0.10),0_10px_24px_rgba(0,0,0,0.10)] max-[720px]:w-full max-[720px]:max-w-[360px]">
       <div class="h-full w-full overflow-hidden rounded-[22px] bg-white">
-        <img
-          src="/photos/recur-screenshot.png"
+        <Image
+          src={recurScreenshot}
           alt="Recur app"
-          width="270"
-          height="270"
+          width={270}
+          height={270}
+          densities={[1, 2]}
+          loading="eager"
           class="block h-full w-full rounded-[22px] object-cover"
         />
       </div>
